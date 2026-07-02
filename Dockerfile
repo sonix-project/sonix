@@ -10,28 +10,18 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /app
+WORKDIR /app/laravel-backend
 
 # Copy composer files first (for caching)
-COPY composer.json composer.lock ./
+COPY laravel-backend/composer.json laravel-backend/composer.lock ./
 RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
 
-# Copy the rest
-COPY . .
+# Copy the rest of laravel-backend
+COPY laravel-backend/ .
 
 # Generate autoloader and optimize
 RUN composer dump-autoload --optimize
 
-# Generate app key
-RUN php artisan key:generate --force || true
-
-# Run migrations
-RUN php artisan migrate --force || true
-
-# Cache config
-RUN php artisan config:cache || true
-RUN php artisan route:cache || true
-
 EXPOSE 8000
 
-CMD ["sh", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"]
+CMD ["sh", "-c", "php artisan key:generate --force && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"]
