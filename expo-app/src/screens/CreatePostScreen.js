@@ -5,12 +5,14 @@ import * as ImagePicker from "expo-image-picker";
 import client from "../api/client";
 import { COLORS, SIZES } from "../components/Theme";
 import { useLanguage } from "../context/LanguageContext";
+import { useAuth } from "../context/AuthContext";
 import Screen3D from "../components/3D/Screen3D";
 
 const { width: SCREEN_W } = Dimensions.get("window");
 
 export default function CreatePostScreen({ navigation }) {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const [content, setContent] = useState("");
   const [mediaUri, setMediaUri] = useState(null);
   const [mediaType, setMediaType] = useState(null);
@@ -80,11 +82,11 @@ export default function CreatePostScreen({ navigation }) {
       <ScrollView style={s.scrollContent} contentContainerStyle={s.scrollContentContainer}>
         <View style={s.authorRow}>
           <View style={[s.authorAvatar, { backgroundColor: COLORS.primary + "30" }]}>
-            <Text style={[s.authorAvatarText, { color: COLORS.primary }]}>U</Text>
+            <Text style={[s.authorAvatarText, { color: COLORS.primary }]}>{(user?.username || "U").charAt(0).toUpperCase()}</Text>
           </View>
           <View>
-            <Text style={s.authorName}>You</Text>
-            <Text style={s.authorBadge}>Public</Text>
+            <Text style={s.authorName}>{user?.username || "You"}</Text>
+            <Text style={s.authorBadge}>{user?.is_private ? t("private") : t("public")}</Text>
           </View>
         </View>
 
