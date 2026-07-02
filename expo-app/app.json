@@ -1,0 +1,56 @@
+{
+  "expo": {
+    "name": "Sonix",
+    "slug": "sonix-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "scheme": "sonix-app",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0a0a1a"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sonix.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow camera access for Sonix stories and posts",
+        "NSPhotoLibraryUsageDescription": "Allow photo access for Sonix stories and posts"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#0D0D1A"
+      },
+      "package": "com.sonix.app",
+      "softwareKeyboardLayoutMode": "resize",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Sonix to access your camera for stories and posts."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Sonix to access your photos for stories and posts."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "sonix-app"
+      }
+    }
+  }
+}

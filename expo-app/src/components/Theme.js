@@ -1,0 +1,48 @@
+export const COLORS = {
+  bg: "#0d0d1a",
+  card: "#1a1a2e",
+  cardHover: "#222240",
+  primary: "#7c6cf7",
+  primaryLight: "#a99cf8",
+  accent: "#d4a574",
+  accentLight: "#e8c89a",
+  accentDark: "#a07844",
+  success: "#4ade80",
+  warning: "#fbbf24",
+  danger: "#f87171",
+  text: "#f0f0f5",
+  textSecondary: "#9898b0",
+  muted: "#5a5a72",
+  border: "rgba(124,108,247,0.12)",
+  input: "rgba(26,26,46,0.8)",
+  overlay: "rgba(0,0,0,0.5)",
+  gradient: ["#7c6cf7", "#d4a574"],
+  gold: "#d4a574",
+  goldLight: "#e8c89a",
+  goldDark: "#a07844",
+  amethyst: "#7c6cf7",
+  amethystLight: "#a99cf8",
+  celestial: "#5b8def",
+  velvet: "#161630",
+  deepSpace: "#0d0d1a",
+};
+
+export const SIZES = {
+  xs: 10,
+  sm: 12,
+  md: 14,
+  lg: 16,
+  xl: 18,
+  xxl: 22,
+  title: 26,
+  radius: 14,
+  radiusLg: 20,
+};
+
+export const FONTS = {
+  regular: { fontWeight: "400" },
+  medium: { fontWeight: "500" },
+  semiBold: { fontWeight: "600" },
+  bold: { fontWeight: "700" },
+  black: { fontWeight: "900" },
+};

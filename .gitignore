@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+vendor/
+.env
+.env.local
+
+# Old unused folders
+backend/
+frontend/
+axios.js
+
+# Laravel
+laravel-backend/.env
+laravel-backend/storage/logs/*.log
+laravel-backend/vendor/
+
+# Expo
+expo-app/.expo/
+expo-app/android/
+expo-app/ios/
+expo-app/web-build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+dist/
+build/
+*.apk
+*.aab
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary
+tmp/
+temp/
