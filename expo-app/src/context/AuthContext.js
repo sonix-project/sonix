@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import client from "../api/client";
+import client, { setAuthExpiredHandler } from "../api/client";
 
 const AuthContext = createContext(null);
 
@@ -10,6 +10,13 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => { loadAuth(); }, []);
+
+  useEffect(() => {
+    setAuthExpiredHandler(() => {
+      setToken(null);
+      setUser(null);
+    });
+  }, []);
 
   const loadAuth = async () => {
     try {
