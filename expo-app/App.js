@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, LogBox } from "react-native";
-
-LogBox.ignoreLogs(["Uncaught (in promise"]);
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";

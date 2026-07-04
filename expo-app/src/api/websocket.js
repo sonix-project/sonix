@@ -1,5 +1,5 @@
 import Echo from "laravel-echo";
-import Pusher from "pusher-js";
+import Pusher from "pusher-js/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IMAGE_BASE } from "./client";
 
