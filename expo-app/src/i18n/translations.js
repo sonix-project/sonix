@@ -272,9 +272,15 @@ const translations = {
     sharePost: "Share Post",
     sharePostDesc: "Send this post to a conversation",
     shared: "Sent",
+    sent: "Sent",
     postSharedWith: "Post shared with {username}",
+    sharedPostWith: "Shared a post with you:",
     failedToShare: "Failed to share post",
     noConversations: "No conversations yet",
+
+    // Likes
+    likes: "Likes",
+    noLikesYet: "No likes yet",
 
     // Language
     language: "Language",
@@ -557,9 +563,15 @@ const translations = {
     sharePost: "مشاركة المنشور",
     sharePostDesc: "أرسل هذا المنشور إلى محادثة",
     shared: "تم الإرسال",
+    sent: "تم الإرسال",
     postSharedWith: "تم مشاركة المنشور مع {username}",
+    sharedPostWith: "شارك معك منشور:",
     failedToShare: "فشل مشاركة المنشور",
     noConversations: "لا توجد محادثات بعد",
+
+    // Likes
+    likes: "الإعجابات",
+    noLikesYet: "لا توجد إعجابات بعد",
 
     // Language
     language: "اللغة",

@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Dimensions, StatusBar, Activi
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { WebView } from "react-native-webview";
 import { IMAGE_BASE } from "../api/client";
+import { useLanguage } from "../context/LanguageContext";
 import { COLORS } from "../components/Theme";
 
 const { width, height } = Dimensions.get("window");
@@ -11,6 +12,7 @@ export default function VideoPostScreen({ route, navigation }) {
   const { videoUrl, username } = route?.params || {};
   const [loading, setLoading] = useState(true);
   const insets = useSafeAreaInsets();
+  const { t } = useLanguage();
 
   const html = `
 <!DOCTYPE html>
@@ -42,7 +44,7 @@ export default function VideoPostScreen({ route, navigation }) {
       {loading && (
         <View style={s.loadingOverlay}>
           <ActivityIndicator size="large" color={COLORS.primary} />
-          <Text style={s.loadingText}>Loading video...</Text>
+          <Text style={s.loadingText}>{t("loadingVideo")}</Text>
         </View>
       )}
       <View style={[s.topBar, { top: insets.top + 10 }]}>

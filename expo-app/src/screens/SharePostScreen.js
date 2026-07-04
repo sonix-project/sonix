@@ -26,8 +26,8 @@ export default function SharePostScreen({ route, navigation }) {
     setSending(userId);
     try {
       const postUrl = `${IMAGE_BASE}/posts/${postId}`;
-      await client.post("/messages", { receiver_id: userId, content: `Shared a post with you: ${postUrl}` });
-      Alert.alert("Sent", `Post shared with ${username}`);
+      await client.post("/messages", { receiver_id: userId, content: `${t("sharedPostWith")} ${postUrl}` });
+      Alert.alert(t("sent"), `${t("postSharedWith")} ${username}`);
       navigation.goBack();
     } catch (e) {
       Alert.alert(t("error"), t("failedToShare"));

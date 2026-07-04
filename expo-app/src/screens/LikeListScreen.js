@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import client from "../api/client";
+import { useLanguage } from "../context/LanguageContext";
 import { COLORS, SIZES } from "../components/Theme";
 import Screen3D from "../components/3D/Screen3D";
 
 export default function LikeListScreen({ route, navigation }) {
+  const { t } = useLanguage();
   const { postId } = route.params;
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,7 +27,7 @@ export default function LikeListScreen({ route, navigation }) {
     <Screen3D>
       <View style={s.topBar}>
         <TouchableOpacity onPress={() => navigation.goBack()}><Text style={s.backBtn}>←</Text></TouchableOpacity>
-        <Text style={s.title}>Likes</Text>
+        <Text style={s.title}>{t("likes")}</Text>
         <View style={{ width: 36 }} />
       </View>
       {loading ? (
@@ -37,7 +39,7 @@ export default function LikeListScreen({ route, navigation }) {
           ListEmptyComponent={
             <View style={s.emptyWrap}>
               <Text style={s.emptyIcon}>❤️</Text>
-              <Text style={s.empty}>No likes yet</Text>
+              <Text style={s.empty}>{t("noLikesYet")}</Text>
             </View>
           }
           renderItem={({ item }) => (

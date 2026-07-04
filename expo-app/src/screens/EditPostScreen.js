@@ -2,23 +2,25 @@ import { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import client from "../api/client";
+import { useLanguage } from "../context/LanguageContext";
 import { COLORS, SIZES } from "../components/Theme";
 import Screen3D from "../components/3D/Screen3D";
 
 export default function EditPostScreen({ route, navigation }) {
+  const { t } = useLanguage();
   const { postId, initialContent } = route.params;
   const [content, setContent] = useState(initialContent || "");
   const [loading, setLoading] = useState(false);
   const insets = useSafeAreaInsets();
 
   const save = async () => {
-    if (!content.trim()) return Alert.alert("Error", "Content cannot be empty");
+    if (!content.trim()) return Alert.alert(t("error"), t("contentEmpty"));
     setLoading(true);
     try {
       await client.put(`/posts/${postId}`, { content: content.trim() });
       navigation.goBack();
     } catch (e) {
-      Alert.alert("Error", "Failed to update post");
+      Alert.alert(t("error"), t("failedToUpdatePost"));
     }
     setLoading(false);
   };
@@ -26,17 +28,17 @@ export default function EditPostScreen({ route, navigation }) {
   return (
     <Screen3D>
       <View style={s.topBar}>
-        <TouchableOpacity onPress={() => navigation.goBack()}><Text style={s.cancelBtn}>Cancel</Text></TouchableOpacity>
-        <Text style={s.title}>Edit Post</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}><Text style={s.cancelBtn}>{t("cancel")}</Text></TouchableOpacity>
+        <Text style={s.title}>{t("editPost")}</Text>
         <TouchableOpacity onPress={save} disabled={loading || !content.trim()} style={[s.saveBtn, (!content.trim()) && { opacity: 0.5 }]}>
-          {loading ? <ActivityIndicator color={COLORS.text} size="small" /> : <Text style={s.saveText}>Save</Text>}
+          {loading ? <ActivityIndicator color={COLORS.text} size="small" /> : <Text style={s.saveText}>{t("save")}</Text>}
         </TouchableOpacity>
       </View>
       <TextInput
         style={s.input}
         value={content}
         onChangeText={setContent}
-        placeholder="Edit your post..."
+        placeholder={t("editPostPlaceholder")}
         placeholderTextColor={COLORS.muted}
         multiline
         maxLength={5000}
