@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView, Dimensions, PanResponder, Modal, FlatList, Keyboard } from "react-native";
 import { COLORS, SIZES, FONTS } from "./Theme";
+import { useLanguage } from "../context/LanguageContext";
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 const COLORS_PALETTE = ["#ffffff", "#000000", "#E17055", "#00CEC9", "#6C5CE7", "#FDCB6E", "#FF7675", "#74B9FF", "#55EFC4", "#FD79A8"];
@@ -88,12 +89,13 @@ const stickerDragStyles = StyleSheet.create({
 });
 
 function StickerPicker({ visible, onSelect, onClose }) {
+  const { t } = useLanguage();
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <View style={s.stickerModalOverlay}>
         <View style={s.stickerModal}>
           <View style={s.modalHandle} />
-          <Text style={s.stickerModalTitle}>Stickers</Text>
+          <Text style={s.stickerModalTitle}>{t("stickers")}</Text>
           <FlatList
             data={STICKER_EMOJIS}
             numColumns={8}
@@ -242,6 +244,7 @@ function DrawingCanvas({ visible, strokes, onAddStroke, onUndo, onRedo, canUndo,
 }
 
 export default function StoryEditor({ imageUri, videoUri, mediaType, onPost }) {
+  const { t } = useLanguage();
   const [text, setText] = useState("");
   const [textColor, setTextColor] = useState("#ffffff");
   const [bgColor, setBgColor] = useState(null);
@@ -326,7 +329,7 @@ export default function StoryEditor({ imageUri, videoUri, mediaType, onPost }) {
         {videoUri ? (
           <View style={[s.previewImage, { backgroundColor: "#000", alignItems: "center", justifyContent: "center" }]}>
             <Text style={{ fontSize: 48, marginBottom: 8 }}>🎬</Text>
-            <Text style={{ color: "#fff", fontSize: 14, opacity: 0.7 }}>Video selected</Text>
+            <Text style={{ color: "#fff", fontSize: 14, opacity: 0.7 }}>{t("videoSelected")}</Text>
           </View>
         ) : imageUri ? (
           <Image source={{ uri: imageUri }} style={s.previewImage} />
@@ -387,7 +390,7 @@ export default function StoryEditor({ imageUri, videoUri, mediaType, onPost }) {
           style={s.textInput}
           value={text}
           onChangeText={setText}
-          placeholder="Add text overlay..."
+          placeholder={t("addTextOverlay")}
           placeholderTextColor={COLORS.muted}
           maxLength={200}
           multiline
@@ -399,7 +402,7 @@ export default function StoryEditor({ imageUri, videoUri, mediaType, onPost }) {
         </Text>
       </View>
 
-      <Text style={s.label}>Text Color</Text>
+      <Text style={s.label}>{t("textColor")}</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={s.colorRow}>
         {COLORS_PALETTE.map((c) => (
           <TouchableOpacity
@@ -410,7 +413,7 @@ export default function StoryEditor({ imageUri, videoUri, mediaType, onPost }) {
         ))}
       </ScrollView>
 
-      <Text style={s.label}>Background</Text>
+      <Text style={s.label}>{t("background")}</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={s.colorRow}>
         {BG_COLORS.map((c, i) => (
           <TouchableOpacity
@@ -423,7 +426,7 @@ export default function StoryEditor({ imageUri, videoUri, mediaType, onPost }) {
         ))}
       </ScrollView>
 
-      <Text style={s.label}>Duration: {duration}s</Text>
+      <Text style={s.label}>{t("duration")}: {duration}s</Text>
       <View style={s.durationRow}>
         {[3, 5, 10, 15, 30, 60].map((d) => (
           <TouchableOpacity key={d} style={[s.durBtn, duration === d && s.durActive]} onPress={() => setDuration(d)}>
@@ -434,7 +437,7 @@ export default function StoryEditor({ imageUri, videoUri, mediaType, onPost }) {
 
       {stickers.length > 0 && (
         <>
-          <Text style={s.label}>Stickers ({stickers.length}) — drag to position</Text>
+          <Text style={s.label}>{t("stickers")} ({stickers.length}) — {t("dragToPosition")}</Text>
           <View style={s.stickerChips}>
             {stickers.map((st, i) => (
               <TouchableOpacity key={i} style={s.stickerChip} onPress={() => removeSticker(i)}>
@@ -448,10 +451,10 @@ export default function StoryEditor({ imageUri, videoUri, mediaType, onPost }) {
       {drawingStrokes.length > 0 && (
         <View style={s.drawActions}>
           <TouchableOpacity style={s.undoRedoBtn} onPress={undoDrawing}>
-            <Text style={s.undoRedoText}>↩ Undo</Text>
+            <Text style={s.undoRedoText}>↩ {t("undo")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={s.undoRedoBtn} onPress={() => setDrawingStrokes([])}>
-            <Text style={[s.undoRedoText, { color: COLORS.danger }]}>Clear All</Text>
+            <Text style={[s.undoRedoText, { color: COLORS.danger }]}>{t("clearAll")}</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -461,7 +464,7 @@ export default function StoryEditor({ imageUri, videoUri, mediaType, onPost }) {
         onPress={submit}
         disabled={posting || (!imageUri && !videoUri && !text.trim())}
       >
-        <Text style={s.postBtnText}>{posting ? "Posting..." : "Post Story"}</Text>
+        <Text style={s.postBtnText}>{posting ? t("posting") : t("postStory")}</Text>
       </TouchableOpacity>
 
       <StickerPicker visible={showStickerPicker} onSelect={addSticker} onClose={() => setShowStickerPicker(false)} />

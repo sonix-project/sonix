@@ -27,4 +27,4 @@ RUN mkdir -p public/uploads storage/framework/{cache,sessions,views} storage/log
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "mkdir -p public/uploads && php artisan key:generate --force && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"]
+CMD ["sh", "-c", "mkdir -p public/uploads && php artisan key:generate --force && php artisan migrate --force && php -d upload_max_filesize=50M -d post_max_size=55M -d max_execution_time=120 -d memory_limit=256M artisan serve --host=0.0.0.0 --port=8000"]
