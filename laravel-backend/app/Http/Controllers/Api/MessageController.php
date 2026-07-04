@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Helpers\Sanitize;
 use App\Models\Message;
 use App\Models\MessageReaction;
 use App\Models\ConversationSetting;
@@ -35,7 +36,7 @@ class MessageController extends Controller
         $data = [
             'sender_id' => $request->user()->id,
             'receiver_id' => $receiverId,
-            'content' => $request->input('content', ''),
+            'content' => Sanitize::text($request->input('content', '')),
             'type' => 'text',
             'is_read' => false,
             'reply_to' => $request->input('reply_to'),

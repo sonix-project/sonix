@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Helpers\Sanitize;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Follow;
@@ -71,11 +72,11 @@ class UserController extends Controller
         ]);
 
         if ($request->has('username')) {
-            $user->username = $request->input('username');
+            $user->username = Sanitize::text($request->input('username'));
         }
 
         if ($request->has('bio')) {
-            $user->bio = $request->input('bio');
+            $user->bio = Sanitize::text($request->input('bio'));
         }
 
         if ($request->hasFile('avatar')) {
@@ -94,11 +95,12 @@ class UserController extends Controller
         $query = $request->input('q', '');
         if (strlen($query) < 2) return response()->json([]);
 
+        $query = Sanitize::text($query);
         $blockedIds = BlockedUser::where('user_id', $request->user()?->id)->pluck('blocked_id')->toArray();
 
         $users = User::select('id', 'username', 'avatar', 'is_private')
             ->whereNotIn('id', $blockedIds)
-            ->where('username', 'like', "%{$query}%")
+            ->where('username', 'like', '%' . $query . '%')
             ->limit(20)
             ->get();
 

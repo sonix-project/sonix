@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Helpers\Sanitize;
 use App\Models\Post;
 use App\Models\Follow;
 use App\Models\User;
@@ -100,7 +101,7 @@ class PostController extends Controller
 
         $request->validate(['content' => 'required|string|max:5000']);
 
-        $post->content = $request->input('content');
+        $post->content = Sanitize::text($request->input('content'));
         $post->save();
 
         $post->load('user:id,username,avatar');
@@ -126,7 +127,7 @@ class PostController extends Controller
         }
 
         $data = [
-            'content' => $request->content ?? '',
+            'content' => Sanitize::text($request->content ?? ''),
             'type' => $hasVideo ? 'video' : ($hasImage ? 'image' : 'text'),
             'user_id' => $request->user()->id,
         ];

@@ -21,7 +21,7 @@ Route::post('/auth/login', [AuthController::class, 'login'])->middleware('thrott
 Route::get('/users', [UserController::class, 'index']);
 Route::get('/users/search', [UserController::class, 'search'])->middleware('auth:sanctum');
 Route::get('/users/me', [UserController::class, 'me'])->middleware('auth:sanctum');
-Route::post('/users/profile', [UserController::class, 'updateProfile'])->middleware('auth:sanctum');
+Route::post('/users/profile', [UserController::class, 'updateProfile'])->middleware(['auth:sanctum', 'throttle:10,1']);
 Route::get('/users/{id}', [UserController::class, 'show']);
 Route::get('/users/{id}/stats', [UserController::class, 'stats']);
 Route::get('/users/{id}/status', [UserController::class, 'status']);
@@ -30,14 +30,14 @@ Route::post('/notifications/register', [NotificationController::class, 'register
 Route::post('/users/toggle-privacy', [UserController::class, 'togglePrivacy'])->middleware('auth:sanctum');
 
 Route::post('/auth/change-password', [AuthController::class, 'changePassword'])->middleware(['auth:sanctum', 'throttle:5,1']);
-Route::delete('/auth/account', [AuthController::class, 'deleteAccount'])->middleware('auth:sanctum');
+Route::delete('/auth/account', [AuthController::class, 'deleteAccount'])->middleware(['auth:sanctum', 'throttle:3,1']);
 
 Route::get('/posts', [PostController::class, 'index']);
 Route::post('/posts', [PostController::class, 'store'])->middleware(['auth:sanctum', 'throttle:10,1']);
 Route::get('/posts/{id}', [PostController::class, 'show']);
 Route::put('/posts/{id}', [PostController::class, 'update'])->middleware('auth:sanctum');
 Route::get('/posts/user/{userId}', [PostController::class, 'userPosts'])->middleware('auth:sanctum');
-Route::delete('/posts/{id}', [PostController::class, 'destroy'])->middleware('auth:sanctum');
+Route::delete('/posts/{id}', [PostController::class, 'destroy'])->middleware(['auth:sanctum', 'throttle:20,1']);
 
 Route::post('/likes', [LikeController::class, 'toggle'])->middleware(['auth:sanctum', 'throttle:30,1']);
 Route::get('/likes/{postId}', [LikeController::class, 'count']);
@@ -45,7 +45,7 @@ Route::get('/likes/{postId}/users', [LikeController::class, 'users']);
 
 Route::get('/posts/{postId}/comments', [CommentController::class, 'index']);
 Route::post('/posts/{postId}/comments', [CommentController::class, 'store'])->middleware(['auth:sanctum', 'throttle:20,1']);
-Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->middleware('auth:sanctum');
+Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->middleware(['auth:sanctum', 'throttle:20,1']);
 
 Route::post('/follow', [FollowController::class, 'toggle'])->middleware(['auth:sanctum', 'throttle:15,1']);
 Route::get('/follow/{userId}/followers', [FollowController::class, 'followers']);
@@ -70,7 +70,7 @@ Route::get('/messages/typing/{userId}', [MessageController::class, 'checkTyping'
 Route::get('/messages/{userId}', [MessageController::class, 'conversation'])->middleware('auth:sanctum');
 Route::post('/messages/{id}/react', [MessageController::class, 'addReaction'])->middleware(['auth:sanctum', 'throttle:30,1']);
 Route::delete('/messages/{id}/react', [MessageController::class, 'removeReaction'])->middleware('auth:sanctum');
-Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->middleware('auth:sanctum');
+Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->middleware(['auth:sanctum', 'throttle:20,1']);
 Route::post('/messages/mute/{userId}', [MessageController::class, 'toggleMute'])->middleware('auth:sanctum');
 Route::post('/messages/pin/{userId}', [MessageController::class, 'togglePin'])->middleware('auth:sanctum');
 Route::delete('/messages/conversation/{userId}', [MessageController::class, 'deleteConversation'])->middleware('auth:sanctum');
@@ -84,7 +84,7 @@ Route::delete('/stories/{id}/react', [StoryController::class, 'removeReaction'])
 Route::get('/stories/{id}/reactions', [StoryController::class, 'reactions'])->middleware('auth:sanctum');
 Route::get('/stories/{id}/analytics', [StoryController::class, 'analytics'])->middleware('auth:sanctum');
 Route::post('/stories/{id}/forward', [StoryController::class, 'forward'])->middleware(['auth:sanctum', 'throttle:10,1']);
-Route::delete('/stories/{id}', [StoryController::class, 'destroy'])->middleware('auth:sanctum');
+Route::delete('/stories/{id}', [StoryController::class, 'destroy'])->middleware(['auth:sanctum', 'throttle:20,1']);
 
 Route::get('/stories/highlights/all', [StoryController::class, 'highlights'])->middleware('auth:sanctum');
 Route::post('/stories/highlights', [StoryController::class, 'storeHighlight'])->middleware(['auth:sanctum', 'throttle:10,1']);

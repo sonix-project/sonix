@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Helpers\Sanitize;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class CommentController extends Controller
         ]);
 
         $comment = Comment::create([
-            'content' => $request->input('content'),
+            'content' => Sanitize::text($request->input('content')),
             'user_id' => $request->user()->id,
             'post_id' => $postId,
             'parent_id' => $parentId ? (int) $parentId : null,

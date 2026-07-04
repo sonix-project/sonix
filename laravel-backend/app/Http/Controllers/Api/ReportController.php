@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Helpers\Sanitize;
 use App\Models\Report;
 use App\Models\Post;
 use App\Models\User;
@@ -20,7 +21,7 @@ class ReportController extends Controller
 
         $type = $request->input('type');
         $targetId = (int) $request->input('id');
-        $reason = $request->input('reason');
+        $reason = Sanitize::text($request->input('reason'));
 
         if ($type === 'post') {
             $target = Post::find($targetId);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Helpers\Sanitize;
 use App\Models\Story;
 use App\Models\StoryView;
 use App\Models\StoryReaction;
@@ -98,7 +99,7 @@ class StoryController extends Controller
         $data = [
             'user_id' => $request->user()->id,
             'type' => $request->hasFile('video') ? 'video' : ($request->hasFile('image') ? 'image' : 'text'),
-            'text_overlay' => $request->input('text_overlay'),
+            'text_overlay' => Sanitize::text($request->input('text_overlay')),
             'text_color' => $request->input('text_color', '#ffffff'),
             'bg_color' => $request->input('bg_color'),
             'duration' => $request->input('duration', 5),
