@@ -40,7 +40,7 @@ const ConversationItem = memo(({ item, onPress, onLongPress, onDelete, onMute, o
         <TouchableOpacity style={s.rowInner} onPress={onPress} onLongPress={onLongPress} activeOpacity={0.7}>
           <View style={s.avatarWrap}>
             {item.user.avatar ? (
-              <Image source={{ uri: `${IMAGE_BASE}${item.user.avatar}` }} style={s.avatarImg} />
+              <Image source={{ uri: `${IMAGE_BASE}${item.user.avatar}${item.user.id === user?.id ? "?t=" + Date.now() : ""}` }} style={s.avatarImg} />
             ) : (
               <View style={[s.avatar, { backgroundColor: COLORS.primary + "30" }]}>
                 <Text style={[s.avatarText, { color: COLORS.primary }]}>{item.user.username?.[0]?.toUpperCase() || "?"}</Text>

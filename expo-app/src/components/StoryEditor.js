@@ -1,6 +1,5 @@
 import { useState, useRef, useCallback } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView, Dimensions, PanResponder, Modal, FlatList, Keyboard } from "react-native";
-import { WebView } from "react-native-webview";
 import { COLORS, SIZES, FONTS } from "./Theme";
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
@@ -325,15 +324,10 @@ export default function StoryEditor({ imageUri, videoUri, mediaType, onPost }) {
     <ScrollView style={s.container} contentContainerStyle={s.content} keyboardShouldPersistTaps="handled">
       <View style={[s.preview, !imageUri && !videoUri && { backgroundColor: bgColor || "#1a1a2e" }]}>
         {videoUri ? (
-          <WebView
-            source={{ html: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-            <body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;height:100vh">
-            <video id="v" playsinline webkit-playsinline controls muted src="${videoUri}" style="width:100%;height:100%;object-fit:contain"></video>
-            </body></html>` }}
-            style={{ width: "100%", height: "100%", position: "absolute" }}
-            allowsInlineMediaPlayback
-            javaScriptEnabled
-          />
+          <View style={[s.previewImage, { backgroundColor: "#000", alignItems: "center", justifyContent: "center" }]}>
+            <Text style={{ fontSize: 48, marginBottom: 8 }}>🎬</Text>
+            <Text style={{ color: "#fff", fontSize: 14, opacity: 0.7 }}>Video selected</Text>
+          </View>
         ) : imageUri ? (
           <Image source={{ uri: imageUri }} style={s.previewImage} />
         ) : null}

@@ -40,7 +40,9 @@ export default function EditProfileScreen({ navigation }) {
       form.append("bio", bio.trim());
       if (avatar) form.append("avatar", { uri: avatar, name: "avatar.jpg", type: "image/jpeg" });
       const res = await client.post("/users/profile", form, { headers: { "Content-Type": "multipart/form-data" } });
-      await updateUser(res.data);
+      const userData = { ...res.data };
+      if (userData.avatar) userData.avatar = userData.avatar + "?t=" + Date.now();
+      await updateUser(userData);
       Alert.alert(t("done"), t("profileUpdated"));
       navigation.goBack();
     } catch (e) {

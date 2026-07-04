@@ -99,9 +99,13 @@ const PostCard = memo(({ post, onLike, onBookmark, onComment, onShare, onImagePr
     <Animated.View style={[s.card, cardStyle]}>
       <View style={s.cardHeader}>
         <TouchableOpacity style={s.cardHeaderLeft} onPress={() => onUserPress(post.user?.id)} activeOpacity={0.7}>
-          <View style={[s.cardAvatar, { backgroundColor: COLORS.primary + "30" }]}>
-            <Text style={[s.cardAvatarText, { color: COLORS.primary }]}>{post.user?.username?.[0]?.toUpperCase() || "?"}</Text>
-          </View>
+          {post.user?.avatar ? (
+            <Image source={{ uri: `${IMAGE_BASE}${post.user.avatar}` }} style={[s.cardAvatar, { backgroundColor: COLORS.primary + "30" }]} />
+          ) : (
+            <View style={[s.cardAvatar, { backgroundColor: COLORS.primary + "30" }]}>
+              <Text style={[s.cardAvatarText, { color: COLORS.primary }]}>{post.user?.username?.[0]?.toUpperCase() || "?"}</Text>
+            </View>
+          )}
           <View>
             <Text style={s.cardUsername}>{post.user?.username}</Text>
             <Text style={s.cardTime}>{formatTime(post.created_at, t)}</Text>
@@ -322,7 +326,11 @@ export default function FeedScreen({ navigation }) {
               <TouchableOpacity style={s.storyItem} onPress={() => navigation.navigate("StoryViewer", { stories: item.stories, user: item.user })} activeOpacity={0.7}>
                 <View style={[s.storyRing, !item.has_unseen && { borderColor: COLORS.border }]}>
                   <View style={s.storyAvatar}>
-                    <Text style={s.storyInitial}>{item.user?.username?.[0]?.toUpperCase() || "?"}</Text>
+                    {item.user?.avatar ? (
+                      <Image source={{ uri: `${IMAGE_BASE}${item.user.avatar}` }} style={{ width: "100%", height: "100%", borderRadius: 29 }} />
+                    ) : (
+                      <Text style={s.storyInitial}>{item.user?.username?.[0]?.toUpperCase() || "?"}</Text>
+                    )}
                   </View>
                 </View>
                 <Text style={s.storyLabel} numberOfLines={1}>{item.user?.username}</Text>
