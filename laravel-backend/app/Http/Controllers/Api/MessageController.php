@@ -10,7 +10,6 @@ use App\Models\Notification;
 use App\Models\User;
 use App\Events\MessageSent;
 use App\Events\TypingIndicator;
-use App\Services\ImageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 
@@ -43,15 +42,14 @@ class MessageController extends Controller
         ];
 
         if ($request->hasFile('image')) {
-            $imageService = new ImageService();
-            $compressed = $imageService->compress($request->file('image'));
-            $path = $request->file('image')->store('uploads', 'public');
-            $data['image'] = "/storage/$path";
+            $filename = uniqid('msg_') . '.jpg';
+            $request->file('image')->move(public_path('uploads'), $filename);
+            $data['image'] = "/uploads/$filename";
             $data['type'] = 'image';
-            @unlink($compressed);
         } elseif ($request->hasFile('voice')) {
-            $path = $request->file('voice')->store('uploads', 'public');
-            $data['voice'] = "/storage/$path";
+            $filename = uniqid('voice_') . '.webm';
+            $request->file('voice')->move(public_path('uploads'), $filename);
+            $data['voice'] = "/uploads/$filename";
             $data['type'] = 'voice';
         } elseif ($request->has('reaction')) {
             $data['type'] = 'reaction';

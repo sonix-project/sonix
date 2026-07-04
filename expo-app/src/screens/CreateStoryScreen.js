@@ -142,7 +142,7 @@ export default function CreateStoryScreen({ navigation }) {
     setUploadProgress(30);
 
     try {
-      await client.post("/stories", formData, {
+      const res = await client.post("/stories", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         timeout: 300000,
         onUploadProgress: (progressEvent) => {
@@ -160,7 +160,7 @@ export default function CreateStoryScreen({ navigation }) {
 
       setTimeout(() => {
         setUploading(false);
-        navigation.navigate("Home", { screen: "Feed", params: { refresh: true } });
+        navigation.navigate("Home", { screen: "Feed", params: { refresh: Date.now() } });
       }, 600);
     } catch (e) {
       setUploading(false);

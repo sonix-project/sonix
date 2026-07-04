@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo, memo } from "react";
 import { View, Text, FlatList, TouchableOpacity, Image, RefreshControl, StyleSheet, Dimensions, Pressable, Alert, Animated } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 import client, { IMAGE_BASE } from "../api/client";
@@ -190,7 +191,7 @@ const PostCard = memo(({ post, onLike, onBookmark, onComment, onShare, onImagePr
   );
 });
 
-export default function FeedScreen({ navigation }) {
+export default function FeedScreen({ navigation, route }) {
   const { t } = useLanguage();
   const [posts, setPosts] = useState([]);
   const [stories, setStories] = useState([]);
@@ -215,23 +216,35 @@ export default function FeedScreen({ navigation }) {
       else setPosts(newPosts);
       setHasMore(newPosts.length >= 20);
       setPage(pageNum);
-    } catch (e) { console.warn("Feed error:", e?.code || e?.message, e?.config?.url, e?.response?.status); }
+    } catch (e) {
+      console.warn("Feed error:", e?.code || e?.message, e?.config?.url, e?.response?.status);
+    }
     loadingRef.current = false;
     setLoading(false);
   }, []);
 
   const loadStories = useCallback(async () => {
-    try { const res = await client.get("/stories"); setStories(res.data || []); } catch (e) { console.warn("Stories error:", e?.code || e?.message, e?.config?.url, e?.response?.status); }
+    try {
+      const res = await client.get("/stories");
+      setStories(res.data || []);
+    } catch (e) {
+      const status = e?.response?.status;
+      const msg = e?.response?.data?.message || e?.message || "unknown";
+      console.warn("Stories error:", status, msg, e?.config?.url);
+    }
   }, []);
 
   const loadHighlights = useCallback(async () => {
-    try { const res = await client.get("/stories/highlights/all"); setHighlights(res.data || []); } catch (e) {}
+    try { const res = await client.get("/stories/highlights/all"); setHighlights(res.data || []); } catch (e) { /* silent */ }
   }, []);
 
-  useEffect(() => { load(1); loadStories(); loadHighlights(); }, [load, loadStories, loadHighlights]);
   useEffect(() => {
-    const unsub = navigation?.addListener?.("focus", () => { load(1); loadStories(); loadHighlights(); });
-    return unsub;
+    const unsubscribe = navigation.addListener("focus", () => {
+      load(1);
+      loadStories();
+      loadHighlights();
+    });
+    return unsubscribe;
   }, [navigation, load, loadStories, loadHighlights]);
 
   const onRefresh = async () => {
@@ -401,10 +414,11 @@ export default function FeedScreen({ navigation }) {
 
   return (
     <Screen3D>
-      <FlatList
+        <FlatList
         data={posts}
         keyExtractor={(p) => String(p.id)}
         ListHeaderComponent={header}
+        extraData={stories}
         ListEmptyComponent={
           <View style={s.emptyWrap}>
             <View style={s.emptyCircle}>

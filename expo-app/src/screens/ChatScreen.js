@@ -217,42 +217,46 @@ export default function ChatScreen({ route, navigation }) {
     let typingChannel;
 
     const setupWebSocket = async () => {
-      const echo = await getEcho();
-      if (!echo) return;
+      try {
+        const echo = await getEcho();
+        if (!echo) return;
 
-      echoChannel = echo.private(`messages.${user?.id}`);
+        echoChannel = echo.private(`messages.${user?.id}`);
 
-      echoChannel.listen(".message.sent", (event) => {
-        if (event.sender_id === parseInt(userId) || event.receiver_id === parseInt(userId)) {
-          setMessages((prev) => {
-            if (prev.find((m) => m.id === event.id)) return prev;
-            return [...prev, {
-              id: event.id,
-              content: event.content,
-              type: event.type,
-              image: event.image,
-              voice: event.voice,
-              sender_id: event.sender_id,
-              receiver_id: event.receiver_id,
-              created_at: event.created_at,
-              is_read: event.is_read,
-              reply_to: event.reply_to,
-              sender: event.sender,
-              reply_message: null,
-              reactions: [],
-            }];
-          });
-        }
-      });
+        echoChannel.listen(".message.sent", (event) => {
+          if (event.sender_id === parseInt(userId) || event.receiver_id === parseInt(userId)) {
+            setMessages((prev) => {
+              if (prev.find((m) => m.id === event.id)) return prev;
+              return [...prev, {
+                id: event.id,
+                content: event.content,
+                type: event.type,
+                image: event.image,
+                voice: event.voice,
+                sender_id: event.sender_id,
+                receiver_id: event.receiver_id,
+                created_at: event.created_at,
+                is_read: event.is_read,
+                reply_to: event.reply_to,
+                sender: event.sender,
+                reply_message: null,
+                reactions: [],
+              }];
+            });
+          }
+        });
 
-      typingChannel = echo.private(`typing.${user?.id}`);
-      typingChannel.listen(".typing.indicator", (event) => {
-        if (event.sender_id === parseInt(userId)) {
-          setRemoteTyping(event.typing);
-        }
-      });
+        typingChannel = echo.private(`typing.${user?.id}`);
+        typingChannel.listen(".typing.indicator", (event) => {
+          if (event.sender_id === parseInt(userId)) {
+            setRemoteTyping(event.typing);
+          }
+        });
 
-      client.post("/messages/online").catch(() => {});
+        client.post("/messages/online").catch(() => {});
+      } catch (e) {
+        console.warn("WebSocket setup failed:", e?.message);
+      }
     };
 
     setupWebSocket();
@@ -328,31 +332,41 @@ export default function ChatScreen({ route, navigation }) {
   };
 
   const sendImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") { Alert.alert(t("permissionNeeded")); return; }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      quality: 0.7,
-    });
-    if (!result.canceled && result.assets?.[0]) {
-      setSending(true);
-      try {
-        const formData = new FormData();
-        formData.append("receiver_id", userId);
-        const uri = result.assets[0].uri;
-        const filename = uri.split("/").pop() || "photo.jpg";
-        formData.append("image", { uri, name: filename, type: "image/jpeg" });
-        await client.post("/messages", formData, { headers: { "Content-Type": "multipart/form-data" } });
-        await load();
-      } catch (e) { Alert.alert(t("error"), t("failedToSendImage")); }
-      setSending(false);
+    try {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") { Alert.alert(t("permissionNeeded")); return; }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ["images"],
+        quality: 0.7,
+      });
+      if (!result.canceled && result.assets?.[0]) {
+        setSending(true);
+        try {
+          const formData = new FormData();
+          formData.append("receiver_id", String(userId));
+          const uri = result.assets[0].uri;
+          const filename = uri.split("/").pop() || "photo.jpg";
+          formData.append("image", { uri, name: filename, type: "image/jpeg" });
+          await client.post("/messages", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+            timeout: 120000,
+          });
+          await load();
+        } catch (e) {
+          const msg = e?.response?.data?.message || e?.message || t("error");
+          Alert.alert(t("error"), t("failedToSendImage") + "\n" + msg);
+        }
+        setSending(false);
+      }
+    } catch (e) {
+      Alert.alert(t("error"), t("failedToSendImage"));
     }
   };
 
   const sendReaction = async (emoji) => {
     setShowEmojiPicker(false);
     try {
-      await client.post("/messages", { receiver_id: userId, content: emoji, reaction: emoji });
+      await client.post("/messages", { receiver_id: userId, content: emoji });
       await load();
     } catch (_) {}
   };

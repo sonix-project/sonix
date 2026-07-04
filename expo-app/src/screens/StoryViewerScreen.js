@@ -468,7 +468,7 @@ export default function StoryViewerScreen({ route, navigation }) {
           onPressOut={() => { pausedRef.current = false; }}
           style={StyleSheet.absoluteFill}
         >
-          <StoryMedia story={currentStory} onEnd={advance} />
+          <StoryMedia key={currentStory.id} story={currentStory} onEnd={advance} />
           <DrawingOverlay drawingData={currentStory.drawing_data} />
           <StickerOverlay stickers={currentStory.stickers} />
         </TouchableOpacity>
