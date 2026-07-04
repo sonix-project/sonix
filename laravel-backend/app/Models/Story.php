@@ -51,7 +51,7 @@ class Story extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('created_at', '>=', now()->subHours(24));
+        return $query->where('created_at', '>=', now()->subHours(12));
     }
 
     public function scopeForUser($query, $userId)

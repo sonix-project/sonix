@@ -31,7 +31,7 @@ class StoryController extends Controller
             $q->selectRaw('story_id, emoji, COUNT(*) as count')->groupBy('story_id', 'emoji');
         }])
             ->whereIn('user_id', $followingIds)
-            ->where('created_at', '>=', now()->subHours(24))
+            ->where('created_at', '>=', now()->subHours(12))
             ->latest()
             ->get()
             ->groupBy('user_id');
@@ -117,7 +117,7 @@ class StoryController extends Controller
     {
         $story = Story::find($id);
         if (!$story) return response()->json(['message' => 'Not found'], 404);
-        if ($story->created_at->lt(now()->subHours(24))) {
+        if ($story->created_at->lt(now()->subHours(12))) {
             return response()->json(['message' => 'Story expired'], 410);
         }
 
@@ -161,7 +161,7 @@ class StoryController extends Controller
 
         $story = Story::find($id);
         if (!$story) return response()->json(['message' => 'Not found'], 404);
-        if ($story->created_at->lt(now()->subHours(24))) {
+        if ($story->created_at->lt(now()->subHours(12))) {
             return response()->json(['message' => 'Story expired'], 410);
         }
 
@@ -400,7 +400,7 @@ class StoryController extends Controller
     public function myStories(Request $request)
     {
         $stories = Story::where('user_id', $request->user()->id)
-            ->where('created_at', '>=', now()->subHours(24))
+            ->where('created_at', '>=', now()->subHours(12))
             ->latest()
             ->get();
 

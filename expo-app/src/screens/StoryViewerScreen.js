@@ -11,21 +11,42 @@ const { width, height } = Dimensions.get("window");
 
 function StoryMedia({ story, onEnd }) {
   if (story.type === "video") {
-    const html = `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"></head>
-    <body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden">
-    <video id="v" playsinline webkit-playsinline autoplay muted
-      src="${IMAGE_BASE}${story.video}" style="width:100%;height:100%;object-fit:contain"></video>
-    <script>document.getElementById('v').addEventListener('ended',()=>window.ReactNativeWebView.postMessage('ended'));</script>
-    </body></html>`;
+    const videoUrl = `${IMAGE_BASE}${story.video}`;
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+    video { width: 100%; height: 100%; object-fit: contain; background: #000; }
+  </style>
+</head>
+<body>
+  <video id="v" playsinline webkit-playsinline autoplay muted controls
+    src="${videoUrl}" type="video/mp4"
+    style="width:100%;height:100%;object-fit:contain"></video>
+  <script>
+    var v = document.getElementById('v');
+    v.addEventListener('ended', function() { window.ReactNativeWebView.postMessage('ended'); });
+    v.addEventListener('error', function(e) { window.ReactNativeWebView.postMessage('error:' + (e.target.error?.message || 'unknown')); });
+    v.load();
+  </script>
+</body>
+</html>`;
     return (
       <WebView
         source={{ html }}
-        style={{ width, height: "100%" }}
+        style={{ width, height: "100%", backgroundColor: "#000" }}
         allowsInlineMediaPlayback
         mediaPlaybackRequiresUserAction={false}
         javaScriptEnabled
         scrollEnabled={false}
-        onMessage={(e) => { if (e.nativeEvent.data === "ended") onEnd?.(); }}
+        allowsFullscreenVideo={false}
+        mixedContentMode="always"
+        onMessage={(e) => {
+          if (e.nativeEvent.data === "ended") onEnd?.();
+        }}
       />
     );
   }
