@@ -144,6 +144,21 @@ class StoryController extends Controller
 
     public function store(Request $request)
     {
+        try {
+            return $this->doStore($request);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['message' => 'Validation failed', 'errors' => $e->errors()], 422);
+        } catch (\Illuminate\Database\QueryException $e) {
+            \Log::error('Story DB error', ['code' => $e->errorInfo[1] ?? null, 'msg' => $e->getMessage()]);
+            return response()->json(['message' => 'Database error: ' . ($e->errorInfo[0] ?? $e->getMessage())], 500);
+        } catch (\Throwable $e) {
+            \Log::error('Story store error', ['msg' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            return response()->json(['message' => 'Story creation failed: ' . $e->getMessage()], 500);
+        }
+    }
+
+    protected function doStore(Request $request)
+    {
         $rules = [];
         if ($request->hasFile('video')) {
             $rules['video'] = 'required|mimes:mp4,mov,avi,webm|max:51200';
@@ -171,10 +186,20 @@ class StoryController extends Controller
         ];
 
         if ($request->hasFile('video')) {
-            $ext = $request->file('video')->getClientOriginalExtension() ?: 'mp4';
+            $videoFile = $request->file('video');
+            $ext = $videoFile->getClientOriginalExtension() ?: 'mp4';
             $filename = uniqid('vid_') . '.' . $ext;
-            $request->file('video')->move(public_path('uploads'), $filename);
+            $dest = public_path('uploads');
+            if (!is_dir($dest)) {
+                mkdir($dest, 0775, true);
+            }
+            $moved = $videoFile->move($dest, $filename);
+            if (!$moved || !file_exists($dest . '/' . $filename)) {
+                \Log::error('Story video move failed', ['filename' => $filename, 'size' => $videoFile->getSize()]);
+                return response()->json(['message' => 'Video upload failed'], 500);
+            }
             $data['video'] = "/uploads/$filename";
+            \Log::info('Story video saved', ['filename' => $filename, 'size' => $videoFile->getSize()]);
         } elseif ($request->hasFile('image')) {
             $filename = uniqid('img_') . '.jpg';
             $request->file('image')->move(public_path('uploads'), $filename);
@@ -192,8 +217,8 @@ class StoryController extends Controller
             'text_color' => $data['text_color'] ?? '#ffffff',
             'bg_color' => $data['bg_color'] ?? null,
             'duration' => $data['duration'] ?? 5,
-            'stickers' => $data['stickers'] ?? null,
-            'drawing_data' => $data['drawing_data'] ?? null,
+            'stickers' => isset($data['stickers']) ? json_encode($data['stickers']) : null,
+            'drawing_data' => isset($data['drawing_data']) ? json_encode($data['drawing_data']) : null,
             'created_at' => now(),
             'updated_at' => now(),
         ];
