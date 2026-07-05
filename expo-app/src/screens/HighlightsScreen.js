@@ -147,7 +147,14 @@ export default function HighlightsScreen({ route, navigation }) {
             <View style={s.highlightCard}>
               <TouchableOpacity
                 style={s.highlightMain}
-                onPress={() => navigation.navigate("HighlightStories", { highlightId: h.id, title: h.title })}
+                onPress={() => {
+                  const stories = h.stories || [];
+                  if (stories.length === 0) return;
+                  navigation.navigate("StoryViewer", {
+                    stories,
+                    user: stories[0]?.user || currentUser,
+                  });
+                }}
                 onLongPress={() => isOwner && deleteHighlight(h.id)}
               >
                 <View style={s.highlightCover}>

@@ -61,7 +61,7 @@ export function AuthProvider({ children }) {
   const updateUser = useCallback(async (userData) => {
     setUser((prev) => {
       const updated = { ...prev, ...userData };
-      AsyncStorage.setItem("user", JSON.stringify(updated));
+      AsyncStorage.setItem("user", JSON.stringify(updated)).catch(() => {});
       return updated;
     });
   }, []);
