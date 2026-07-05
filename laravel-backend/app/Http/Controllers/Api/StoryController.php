@@ -186,8 +186,25 @@ class StoryController extends Controller
             $data['image'] = "/uploads/$filename";
         }
 
-        $story = Story::create($data);
-        $story->load('user:id,username,avatar');
+        $insertData = [
+            'user_id' => $data['user_id'],
+            'type' => $data['type'],
+            'image' => $data['image'] ?? null,
+            'video' => $data['video'] ?? null,
+            'text_overlay' => $data['text_overlay'] ?? null,
+            'text_color' => $data['text_color'] ?? '#ffffff',
+            'bg_color' => $data['bg_color'] ?? null,
+            'duration' => $data['duration'] ?? 5,
+            'stickers' => isset($data['stickers']) ? json_encode($data['stickers']) : null,
+            'drawing_data' => isset($data['drawing_data']) ? json_encode($data['drawing_data']) : null,
+            'is_highlight' => false,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+
+        DB::table('stories')->insert($insertData);
+        $storyId = DB::getPdo()->lastInsertId();
+        $story = Story::with('user:id,username,avatar')->findOrFail($storyId);
 
         // Queue fan-out instead of blocking the request
         $this->cache->queueFanOut($story->id, $request->user()->id);
