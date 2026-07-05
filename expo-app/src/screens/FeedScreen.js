@@ -322,27 +322,53 @@ export default function FeedScreen({ navigation, route }) {
       </View>
 
       {!loading && stories.length === 0 && (
-        <TouchableOpacity
-          style={{ padding: 12, backgroundColor: 'rgba(248,113,113,0.1)', marginBottom: 4, borderRadius: 8, marginHorizontal: 12 }}
-          onPress={async () => {
-            try {
-              const res = await client.get("/stories/debug");
-              const d = res.data;
-              Alert.alert("Debug", [
-                `user_id: ${d.user_id}`,
-                `table_exists: ${d.table_exists}`,
-                `raw_count: ${d.raw_count}`,
-                `columns: ${d.columns?.length || 0}`,
-                `test_insert: ${d.test_insert}`,
-                `my_stories: ${d.my_stories?.length || 0}`,
-              ].join("\n"));
-            } catch (e) {
-              Alert.alert("Error", e?.message || "unknown");
-            }
-          }}
-        >
-          <Text style={{ color: '#f87171', fontSize: 12, textAlign: 'center' }}>⚠ Stories: 0 — اضغط للتشخيص</Text>
-        </TouchableOpacity>
+        <>
+          <TouchableOpacity
+            style={{ padding: 12, backgroundColor: 'rgba(248,113,113,0.1)', marginBottom: 4, borderRadius: 8, marginHorizontal: 12 }}
+            onPress={async () => {
+              try {
+                const res = await client.get("/stories/debug");
+                const d = res.data;
+                Alert.alert("Debug", [
+                  `user_id: ${d.user_id}`,
+                  `table_exists: ${d.table_exists}`,
+                  `raw_count: ${d.raw_count}`,
+                  `columns: ${d.columns?.length || 0}`,
+                  `has_is_highlight: ${d.has_is_highlight}`,
+                  `test_insert: ${d.test_insert}`,
+                  `my_stories_count: ${d.my_stories?.length || 0}`,
+                  `my_stories: ${JSON.stringify(d.my_stories?.slice(0,3)?.map(s => ({id:s.id,type:s.type,text:s.text_overlay,created:s.created_at})) || [])}`,
+                  `server_time: ${d.now}`,
+                ].join("\n"));
+              } catch (e) {
+                Alert.alert("Error", e?.message || "unknown");
+              }
+            }}
+          >
+            <Text style={{ color: '#f87171', fontSize: 12, textAlign: 'center' }}>⚠ Stories: 0 — اضغط للتشخيص</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ padding: 12, backgroundColor: 'rgba(124,108,247,0.15)', marginBottom: 4, borderRadius: 8, marginHorizontal: 12 }}
+            onPress={async () => {
+              try {
+                const formData = new FormData();
+                formData.append("text_overlay", "Debug test " + Date.now());
+                formData.append("text_color", "#ffffff");
+                formData.append("duration", "5");
+                const res = await client.post("/stories", formData, {
+                  headers: { "Content-Type": "multipart/form-data" },
+                  timeout: 30000,
+                });
+                Alert.alert("Created!", `Story #${res.data?.id} created. Refreshing...`);
+                loadStories(true);
+              } catch (e) {
+                Alert.alert("Create Failed", e?.response?.data?.message || e?.response?.status || e?.message);
+              }
+            }}
+          >
+            <Text style={{ color: '#7c6cf7', fontSize: 12, textAlign: 'center' }}>➕ Create Test Story</Text>
+          </TouchableOpacity>
+        </>
       )}
 
       <View style={s.storiesWrap}>

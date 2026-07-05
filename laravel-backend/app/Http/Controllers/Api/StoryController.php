@@ -101,16 +101,15 @@ class StoryController extends Controller
     {
         $userId = $request->user()->id;
 
-        // Raw count - bypasses model
         $rawCount = DB::select("SELECT COUNT(*) as cnt FROM stories WHERE user_id = ?", [$userId]);
         
-        // Table structure
         $hasTable = Schema::hasTable('stories');
         $columns = $hasTable ? Schema::getColumns('stories') : [];
         $columnNames = array_column($columns, 'name');
+        $hasIsHighlight = Schema::hasColumn('stories', 'is_highlight');
 
-        // Try raw insert test
         $testInsert = null;
+        $testInsertId = null;
         try {
             DB::table('stories')->insert([
                 'user_id' => $userId,
@@ -121,28 +120,24 @@ class StoryController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+            $testInsertId = DB::getPdo()->lastInsertId();
             $testInsert = 'success';
-            // Clean up test row
-            DB::table('stories')->where('text_overlay', 'LIKE', 'debug_test_%')->where('user_id', $userId)->delete();
+            DB::table('stories')->where('id', $testInsertId)->delete();
         } catch (\Throwable $e) {
             $testInsert = $e->getMessage();
         }
 
-        $followingIds = Follow::where('follower_id', $userId)
-            ->where('status', 'accepted')
-            ->pluck('following_id')
-            ->toArray();
-        $followingIds[] = $userId;
-
-        $myStories = Story::where('user_id', $userId)->latest()->limit(5)->get();
+        $allStories = DB::table('stories')->where('user_id', $userId)->orderBy('created_at', 'desc')->limit(10)->get();
 
         return response()->json([
             'user_id' => $userId,
             'raw_count' => $rawCount[0]->cnt ?? 'error',
             'table_exists' => $hasTable,
             'columns' => $columnNames,
+            'has_is_highlight' => $hasIsHighlight,
             'test_insert' => $testInsert,
-            'my_stories' => $myStories,
+            'test_insert_id' => $testInsertId,
+            'my_stories' => $allStories,
             'now' => now()->toIso8601String(),
         ]);
     }
@@ -186,6 +181,8 @@ class StoryController extends Controller
             $data['image'] = "/uploads/$filename";
         }
 
+        $hasIsHighlight = Schema::hasColumn('stories', 'is_highlight');
+
         $insertData = [
             'user_id' => $data['user_id'],
             'type' => $data['type'],
@@ -195,12 +192,23 @@ class StoryController extends Controller
             'text_color' => $data['text_color'] ?? '#ffffff',
             'bg_color' => $data['bg_color'] ?? null,
             'duration' => $data['duration'] ?? 5,
-            'stickers' => isset($data['stickers']) ? json_encode($data['stickers']) : null,
-            'drawing_data' => isset($data['drawing_data']) ? json_encode($data['drawing_data']) : null,
-            'is_highlight' => false,
+            'stickers' => $data['stickers'] ?? null,
+            'drawing_data' => $data['drawing_data'] ?? null,
             'created_at' => now(),
             'updated_at' => now(),
         ];
+
+        if ($hasIsHighlight) {
+            $insertData['is_highlight'] = false;
+        }
+
+        \Log::info('Story insert attempt', [
+            'user_id' => $data['user_id'],
+            'type' => $data['type'],
+            'has_image' => !empty($data['image']),
+            'has_video' => !empty($data['video']),
+            'has_is_highlight_col' => $hasIsHighlight,
+        ]);
 
         DB::table('stories')->insert($insertData);
         $storyId = DB::getPdo()->lastInsertId();
