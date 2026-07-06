@@ -4,3 +4,4 @@ laravel-backend/
 railway.json
 Dockerfile
 .gitignore
+composer.phar
