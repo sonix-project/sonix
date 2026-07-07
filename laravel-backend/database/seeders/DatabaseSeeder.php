@@ -47,16 +47,16 @@ class DatabaseSeeder extends Seeder
 
         // ── Posts ──
         $posts = [
-            ['user_id' => $createdUsers[0]->id, 'content' => 'Welcome to the app! 🎉 This is our first post. Excited to have you all here!'],
-            ['user_id' => $createdUsers[1]->id, 'content' => 'Beautiful sunset today 🌅 #nature #photography'],
-            ['user_id' => $createdUsers[2]->id, 'content' => 'Just shipped a new feature 💻 #coding #developer'],
-            ['user_id' => $createdUsers[3]->id, 'content' => 'Best pasta in town! 🍝 #foodie #italian'],
-            ['user_id' => $createdUsers[4]->id, 'content' => 'New design system is ready 🎨 #design #ui'],
-            ['user_id' => $createdUsers[5]->id, 'content' => 'New album out now! 🎶 #music #newrelease'],
-            ['user_id' => $createdUsers[1]->id, 'content' => 'Coffee and code ☕ #morning'],
-            ['user_id' => $createdUsers[2]->id, 'content' => 'Weekend vibes ✨ #weekend'],
-            ['user_id' => $createdUsers[0]->id, 'content' => 'Thanks for 1000 followers! 🙏 #milestone'],
-            ['user_id' => $createdUsers[3]->id, 'content' => 'Travel day! ✈️ #adventure'],
+            ['user_id' => $createdUsers[0]->id, 'type' => 'text', 'content' => 'Welcome to the app! 🎉 This is our first post. Excited to have you all here!'],
+            ['user_id' => $createdUsers[1]->id, 'type' => 'text', 'content' => 'Beautiful sunset today 🌅 #nature #photography'],
+            ['user_id' => $createdUsers[2]->id, 'type' => 'text', 'content' => 'Just shipped a new feature 💻 #coding #developer'],
+            ['user_id' => $createdUsers[3]->id, 'type' => 'text', 'content' => 'Best pasta in town! 🍝 #foodie #italian'],
+            ['user_id' => $createdUsers[4]->id, 'type' => 'text', 'content' => 'New design system is ready 🎨 #design #ui'],
+            ['user_id' => $createdUsers[5]->id, 'type' => 'text', 'content' => 'New album out now! 🎶 #music #newrelease'],
+            ['user_id' => $createdUsers[1]->id, 'type' => 'text', 'content' => 'Coffee and code ☕ #morning'],
+            ['user_id' => $createdUsers[2]->id, 'type' => 'text', 'content' => 'Weekend vibes ✨ #weekend'],
+            ['user_id' => $createdUsers[0]->id, 'type' => 'text', 'content' => 'Thanks for 1000 followers! 🙏 #milestone'],
+            ['user_id' => $createdUsers[3]->id, 'type' => 'text', 'content' => 'Travel day! ✈️ #adventure'],
         ];
 
         $createdPosts = [];
