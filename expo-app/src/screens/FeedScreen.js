@@ -118,24 +118,26 @@ const PostCard = memo(({ post, onLike, onBookmark, onComment, onShare, onImagePr
         </TouchableOpacity>
       </View>
 
-      <Pressable onPress={handleTap} style={s.imagePressable}>
-        {post.type === "video" && post.video ? (
-          <>
-            <Image source={{ uri: resolveUrl(post.image || "") }} style={s.postImg} resizeMode="cover" />
-            {!post.image && <View style={s.videoPlaceholder}><Text style={s.videoPlaceholderIcon}>🎬</Text></View>}
-            <TouchableOpacity style={s.playOverlayIcon} onPress={() => onVideoPress(post)} activeOpacity={0.8}>
-              <View style={s.playCircle}><Text style={s.playTriangle}>▶</Text></View>
-            </TouchableOpacity>
-          </>
-        ) : post.image ? (
-          <Image source={{ uri: resolveUrl(post.image) }} style={s.postImg} resizeMode="cover" />
-        ) : null}
-        <HeartAnimation show={showHeart} />
-      </Pressable>
+      {(post.type === "video" && post.video) || post.image ? (
+        <Pressable onPress={handleTap} style={s.imagePressable}>
+          {post.type === "video" && post.video ? (
+            <>
+              <Image source={{ uri: resolveUrl(post.image || "") }} style={s.postImg} resizeMode="cover" />
+              {!post.image && <View style={s.videoPlaceholder}><Text style={s.videoPlaceholderIcon}>🎬</Text></View>}
+              <TouchableOpacity style={s.playOverlayIcon} onPress={() => onVideoPress(post)} activeOpacity={0.8}>
+                <View style={s.playCircle}><Text style={s.playTriangle}>▶</Text></View>
+              </TouchableOpacity>
+            </>
+          ) : post.image ? (
+            <Image source={{ uri: resolveUrl(post.image) }} style={s.postImg} resizeMode="cover" />
+          ) : null}
+          <HeartAnimation show={showHeart} />
+        </Pressable>
+      ) : null}
 
       {post.content ? (
-        <View style={s.contentWrap}>
-          <Text style={s.contentText}>
+        <View style={[s.contentWrap, !post.image && !(post.type === "video" && post.video) && s.textContentNoImage]}>
+          <Text style={[s.contentText, !post.image && !(post.type === "video" && post.video) && s.textContentLarge]}>
             <Text style={s.contentUser}>{post.user?.username} </Text>
             {renderContent(post.content)}
           </Text>
@@ -547,6 +549,8 @@ const s = StyleSheet.create({
   heartBig: { fontSize: 80 },
 
   contentWrap: { paddingVertical: 8 },
+  textContentNoImage: { paddingHorizontal: 4, paddingVertical: 14 },
+  textContentLarge: { fontSize: 16, lineHeight: 24 },
   contentText: { fontSize: SIZES.md, color: COLORS.text, lineHeight: 22 },
   contentUser: { fontWeight: "700" },
 
