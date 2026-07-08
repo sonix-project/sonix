@@ -118,10 +118,16 @@ class AuthController extends Controller
             });
         } catch (\Exception $e) {
             DB::table('password_reset_tokens')->where('email', $request->email)->delete();
-            return response()->json(['message' => 'Failed to send email. Check mail configuration.'], 500);
+            return response()->json(['message' => 'Failed to send email. Check mail configuration.', 'reset_code' => $token], 500);
         }
 
-        return response()->json(['message' => 'Reset code sent to your email.']);
+        $mailDriver = config('mail.default');
+        $response = ['message' => 'Reset code sent to your email.'];
+        if ($mailDriver === 'log' || $mailDriver === 'array') {
+            $response['reset_code'] = $token;
+        }
+
+        return response()->json($response);
     }
 
     public function resetPassword(Request $request)
