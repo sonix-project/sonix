@@ -53,7 +53,7 @@ class CloudinaryService
                 }
             }
             $signStr = rtrim($signStr, '&');
-            $params['signature'] = hash('sha256', $signStr . $this->apiSecret);
+            $params['signature'] = sha1($signStr . $this->apiSecret);
 
             $response = Http::attach(
                 'file',

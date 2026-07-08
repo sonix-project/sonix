@@ -35,6 +35,16 @@ class StorageHelper
             return $path;
         }
 
-        return url('uploads/' . basename($path));
+        $cleanPath = ltrim($path, '/');
+
+        if (str_starts_with($cleanPath, 'storage/uploads/')) {
+            $cleanPath = substr($cleanPath, strlen('storage/'));
+        }
+
+        if (str_starts_with($cleanPath, 'uploads/')) {
+            return url('api/media/' . $cleanPath);
+        }
+
+        return url('api/media/uploads/' . $cleanPath);
     }
 }
