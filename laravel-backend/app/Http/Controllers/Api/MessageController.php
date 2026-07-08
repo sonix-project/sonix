@@ -37,20 +37,38 @@ class MessageController extends Controller
         $data = [
             'sender_id' => $request->user()->id,
             'receiver_id' => $receiverId,
-            'content' => Sanitize::text($request->input('content', '')),
+            'content' => $request->input('content', '') !== '' ? Sanitize::text($request->input('content', '')) : '',
             'type' => 'text',
             'is_read' => false,
             'reply_to' => $request->input('reply_to'),
         ];
 
         if ($request->hasFile('image')) {
-            $path = StorageHelper::upload($request->file('image'), 'uploads');
-            $data['image'] = StorageHelper::getUrl($path);
-            $data['type'] = 'image';
+            try {
+                $path = StorageHelper::upload($request->file('image'), 'uploads');
+                if ($path) {
+                    $data['image'] = StorageHelper::getUrl($path);
+                    $data['type'] = 'image';
+                } else {
+                    return response()->json(['message' => 'Failed to upload image'], 422);
+                }
+            } catch (\Exception $e) {
+                \Log::error('Image upload failed', ['error' => $e->getMessage()]);
+                return response()->json(['message' => 'Failed to upload image'], 422);
+            }
         } elseif ($request->hasFile('voice')) {
-            $path = StorageHelper::upload($request->file('voice'), 'uploads');
-            $data['voice'] = StorageHelper::getUrl($path);
-            $data['type'] = 'voice';
+            try {
+                $path = StorageHelper::upload($request->file('voice'), 'uploads');
+                if ($path) {
+                    $data['voice'] = StorageHelper::getUrl($path);
+                    $data['type'] = 'voice';
+                } else {
+                    return response()->json(['message' => 'Failed to upload voice'], 422);
+                }
+            } catch (\Exception $e) {
+                \Log::error('Voice upload failed', ['error' => $e->getMessage()]);
+                return response()->json(['message' => 'Failed to upload voice'], 422);
+            }
         } elseif ($request->has('reaction')) {
             $data['type'] = 'reaction';
             $data['content'] = $request->input('reaction');
