@@ -15,7 +15,7 @@ const translations = {
     back: "Back",
 
     // Auth
-    sonix: "YourApp",
+    sonix: "Sonix",
     email: "Email address",
     password: "Password",
     username: "Username",
@@ -36,7 +36,7 @@ const translations = {
     allFieldsRequired: "All fields are required",
     passwordMin: "Password must be at least 6 characters",
     appSlogan: "Connect with the world",
-    appVersion: "YourApp v1.0",
+    appVersion: "Sonix v1.0",
     logoutConfirm: "Are you sure you want to logout?",
 
     // Feed
@@ -328,7 +328,7 @@ const translations = {
     back: "رجوع",
 
     // Auth
-    sonix: "YourApp",
+    sonix: "Sonix",
     email: "البريد الإلكتروني",
     password: "كلمة المرور",
     username: "اسم المستخدم",
@@ -349,7 +349,7 @@ const translations = {
     allFieldsRequired: "جميع الحقول مطلوبة",
     passwordMin: "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
     appSlogan: "تواصل مع العالم",
-    appVersion: "YourApp v1.0",
+    appVersion: "Sonix v1.0",
     logoutConfirm: "هل أنت متأكد من تسجيل الخروج؟",
 
     // Feed
