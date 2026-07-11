@@ -16,7 +16,6 @@ class PostStatsController extends Controller
             'views' => $post->views_count ?? 0,
             'likes' => $post->likes()->count(),
             'comments' => $post->comments()->count(),
-            'shares' => $post->shares_count ?? 0,
             'bookmarks' => $post->bookmarks()->count(),
         ];
 
@@ -29,11 +28,15 @@ class PostStatsController extends Controller
 
         $post->increment('views_count');
 
-        \App\Models\PostView::create([
-            'post_id' => $postId,
-            'user_id' => Auth::id(),
-            'ip_address' => request()->ip(),
-        ]);
+        try {
+            \App\Models\PostView::create([
+                'post_id' => $postId,
+                'user_id' => Auth::id(),
+                'ip_address' => request()->ip(),
+            ]);
+        } catch (\Exception $e) {
+            // Table might not exist yet
+        }
 
         return response()->json(['views' => $post->views_count]);
     }

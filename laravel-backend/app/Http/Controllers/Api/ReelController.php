@@ -11,10 +11,14 @@ class ReelController extends Controller
 {
     public function index(Request $request)
     {
-        $reels = \App\Models\Reel::with('user')
-            ->withCount(['likes', 'comments'])
-            ->orderByDesc('created_at')
-            ->paginate(20);
+        try {
+            $reels = \App\Models\Reel::with('user:id,username,avatar')
+                ->withCount(['likes', 'comments'])
+                ->orderByDesc('created_at')
+                ->paginate(20);
+        } catch (\Exception $e) {
+            return response()->json(['data' => [], 'message' => 'Reels not available']);
+        }
 
         return response()->json($reels);
     }
