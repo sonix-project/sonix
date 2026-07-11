@@ -9,6 +9,9 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\Follow;
 use App\Models\BlockedUser;
+use App\Models\ProfileVisitor;
+use App\Models\UserBadge;
+use App\Models\ProfileTemplate;
 use Illuminate\Http\Request;
 use App\Models\Message;
 use Illuminate\Support\Facades\Redis;
@@ -42,6 +45,13 @@ class UserController extends Controller
     {
         $user = User::select('id', 'username', 'bio', 'avatar', 'is_private', 'created_at')
             ->findOrFail($id);
+
+        if ($request->user()->id != $id) {
+            ProfileVisitor::updateOrCreate(
+                ['user_id' => $id, 'visitor_id' => $request->user()->id],
+                ['updated_at' => now()]
+            );
+        }
 
         return response()->json($user);
     }
@@ -156,5 +166,66 @@ class UserController extends Controller
             // Redis unavailable, skip silently
         }
         return response()->json(['message' => 'Online status updated']);
+    }
+
+    public function visitors($id)
+    {
+        $visitors = ProfileVisitor::with('visitor:id,username,avatar')
+            ->where('user_id', $id)
+            ->latest()
+            ->paginate(50);
+        return response()->json($visitors);
+    }
+
+    public function badges($id)
+    {
+        $badges = UserBadge::where('user_id', $id)->latest()->get();
+        return response()->json($badges);
+    }
+
+    public function addBadge(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'badge_type' => 'required|string|max:50',
+            'badge_name' => 'required|string|max:100',
+            'description' => 'nullable|string|max:255',
+            'icon_url' => 'nullable|string|max:255',
+        ]);
+
+        $badge = UserBadge::create($request->only(['user_id', 'badge_type', 'badge_name', 'description', 'icon_url']));
+        return response()->json($badge, 201);
+    }
+
+    public function removeBadge($id)
+    {
+        $badge = UserBadge::findOrFail($id);
+        $badge->delete();
+        return response()->json(['message' => 'Badge removed']);
+    }
+
+    public function getTemplate($id)
+    {
+        $template = ProfileTemplate::where('user_id', $id)->where('is_active', true)->first();
+        return response()->json($template);
+    }
+
+    public function setTemplate(Request $request)
+    {
+        $request->validate([
+            'template_name' => 'required|string|max:100',
+            'template_data' => 'nullable|array',
+        ]);
+
+        ProfileTemplate::where('user_id', $request->user()->id)->update(['is_active' => false]);
+
+        $template = ProfileTemplate::create([
+            'user_id' => $request->user()->id,
+            'template_name' => $request->input('template_name'),
+            'template_data' => $request->input('template_data'),
+            'is_active' => true,
+        ]);
+
+        return response()->json($template, 201);
     }
 }

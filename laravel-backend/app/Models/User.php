@@ -85,4 +85,29 @@ class User extends Authenticatable
     {
         return $this->hasMany(Story::class);
     }
+
+    public function profileVisitors()
+    {
+        return $this->hasMany(ProfileVisitor::class, 'user_id');
+    }
+
+    public function visits()
+    {
+        return $this->hasMany(ProfileVisitor::class, 'visitor_id');
+    }
+
+    public function badges()
+    {
+        return $this->hasMany(UserBadge::class);
+    }
+
+    public function profileTemplates()
+    {
+        return $this->hasMany(ProfileTemplate::class);
+    }
+
+    public function profileTemplate()
+    {
+        return $this->hasOne(ProfileTemplate::class)->where('is_active', true);
+    }
 }

@@ -33,6 +33,12 @@ Route::get('/users/{id}', [UserController::class, 'show'])->middleware('auth:san
 Route::get('/users/{id}/stats', [UserController::class, 'stats'])->middleware('auth:sanctum');
 Route::get('/users/{id}/status', [UserController::class, 'status'])->middleware('auth:sanctum');
 Route::post('/users/{id}/online', [UserController::class, 'setOnline'])->middleware('auth:sanctum');
+Route::get('/users/{id}/visitors', [UserController::class, 'visitors'])->middleware('auth:sanctum');
+Route::get('/users/{id}/badges', [UserController::class, 'badges'])->middleware('auth:sanctum');
+Route::post('/users/badges', [UserController::class, 'addBadge'])->middleware('auth:sanctum');
+Route::delete('/users/badges/{id}', [UserController::class, 'removeBadge'])->middleware('auth:sanctum');
+Route::get('/users/{id}/template', [UserController::class, 'getTemplate'])->middleware('auth:sanctum');
+Route::post('/users/template', [UserController::class, 'setTemplate'])->middleware('auth:sanctum');
 Route::post('/notifications/register', [NotificationController::class, 'registerToken'])->middleware('auth:sanctum');
 Route::post('/users/toggle-privacy', [UserController::class, 'togglePrivacy'])->middleware('auth:sanctum');
 
