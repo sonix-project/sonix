@@ -86,7 +86,7 @@ export default function LoginScreen({ navigation }) {
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={s.eyeBtn}><Text style={s.eyeIcon}>{showPassword ? "👁️" : "👁️‍🗨️"}</Text></TouchableOpacity>
           </Animated.View>
 
-          <TouchableOpacity style={s.forgotBtn}>
+          <TouchableOpacity style={s.forgotBtn} onPress={() => navigation.navigate("ForgotPassword")}>
             <Text style={s.forgotText}>{t("forgotPassword")}</Text>
           </TouchableOpacity>
 
