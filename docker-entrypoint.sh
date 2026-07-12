@@ -118,6 +118,7 @@ else
     php artisan key:generate --force
 fi
 
+php artisan app:ensure-feature-tables 2>&1 | head -20 || echo "WARNING: Feature table check failed, continuing..."
 php artisan migrate --force || echo "WARNING: Migrations failed, continuing..."
 
 php artisan db:seed --force || echo "WARNING: Seeding failed, continuing..."
