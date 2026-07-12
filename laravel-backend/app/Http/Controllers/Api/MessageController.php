@@ -410,4 +410,31 @@ class MessageController extends Controller
 
         return response()->json(['message' => 'Conversation deleted']);
     }
+
+    public function forward(Request $request, $id)
+    {
+        $message = Message::find($id);
+        if (!$message) return response()->json(['message' => 'Not found'], 404);
+
+        $request->validate(['receiver_id' => 'required|exists:users,id']);
+
+        $receiverId = (int) $request->input('receiver_id');
+
+        $data = [
+            'sender_id' => $request->user()->id,
+            'receiver_id' => $receiverId,
+            'content' => $message->content,
+            'type' => $message->type,
+            'image' => $message->image,
+            'voice' => $message->voice,
+            'is_read' => false,
+        ];
+
+        $forwarded = Message::create($data);
+        $forwarded->load('sender:id,username,avatar');
+
+        try { broadcast(new MessageSent($forwarded)); } catch (\Exception $e) {}
+
+        return response()->json($forwarded, 201);
+    }
 }
