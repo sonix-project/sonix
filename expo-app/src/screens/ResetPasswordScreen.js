@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLanguage } from "../context/LanguageContext";
 import { COLORS, SIZES, FONTS } from "../components/Theme";
 import VideoBackground from "../components/VideoBackground";
-import { client } from "../api/client";
+import client from "../api/client";
 
 function Logo3D() {
   const rotateY = useRef(new Animated.Value(0)).current;
