@@ -14,9 +14,7 @@ use App\Models\UserBadge;
 use App\Models\ProfileTemplate;
 use App\Models\RecentSearch;
 use Illuminate\Http\Request;
-use App\Models\Message;
 use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Schema;
 
 class UserController extends Controller
 {
