@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\VoiceMessageController;
 use App\Http\Controllers\Api\PostStatsController;
 use App\Http\Controllers\Api\TwoFactorController;
 use App\Http\Controllers\Api\BadWordController;
+use App\Http\Controllers\Api\SupportController;
 
 Route::post('/auth/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
 Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
@@ -123,6 +124,8 @@ Route::get('/block/{userId}/status', [BlockController::class, 'status'])->middle
 Route::get('/block/list', [BlockController::class, 'blockedList'])->middleware('auth:sanctum');
 
 Route::post('/reports', [ReportController::class, 'store'])->middleware(['auth:sanctum', 'throttle:10,1']);
+
+Route::post('/support/feedback', [SupportController::class, 'feedback'])->middleware(['auth:sanctum', 'throttle:5,1']);
 
 // Media routes with signed URLs
 Route::get('/media/{path}', [App\Http\Controllers\Api\MediaController::class, 'serve'])->where('path', '.*');
