@@ -7,6 +7,40 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
+    public function preferences(Request $request)
+    {
+        $prefs = $request->user()->notification_prefs;
+
+        if (!$prefs) {
+            $prefs = (object) [
+                'push_enabled' => true,
+                'email_enabled' => false,
+                'like_notifications' => true,
+                'comment_notifications' => true,
+                'follow_notifications' => true,
+                'message_notifications' => true,
+            ];
+        }
+
+        return response()->json($prefs);
+    }
+
+    public function updatePreferences(Request $request)
+    {
+        $valid = $request->validate([
+            'push_enabled' => 'boolean',
+            'email_enabled' => 'boolean',
+            'like_notifications' => 'boolean',
+            'comment_notifications' => 'boolean',
+            'follow_notifications' => 'boolean',
+            'message_notifications' => 'boolean',
+        ]);
+
+        $request->user()->update(['notification_prefs' => $valid]);
+
+        return response()->json(['message' => 'Preferences updated']);
+    }
+
     public function index(Request $request)
     {
         $notifications = $request->user()

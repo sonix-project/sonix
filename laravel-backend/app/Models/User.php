@@ -24,6 +24,7 @@ class User extends Authenticatable
         'typing_to_user_id',
         'push_token',
         'online_at',
+        'notification_prefs',
     ];
 
     protected function casts(): array
@@ -33,6 +34,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'online_at' => 'datetime',
             'password' => 'hashed',
+            'notification_prefs' => 'object',
         ];
     }
 

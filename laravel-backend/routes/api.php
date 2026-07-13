@@ -77,6 +77,8 @@ Route::get('/feed', [FeedController::class, 'index'])->middleware('auth:sanctum'
 
 Route::get('/notifications', [NotificationController::class, 'index'])->middleware('auth:sanctum');
 Route::patch('/notifications/seen', [NotificationController::class, 'markAsSeen'])->middleware('auth:sanctum');
+Route::get('/notifications/preferences', [NotificationController::class, 'preferences'])->middleware('auth:sanctum');
+Route::put('/notifications/preferences', [NotificationController::class, 'updatePreferences'])->middleware('auth:sanctum');
 
 Route::post('/messages', [MessageController::class, 'send'])->middleware(['auth:sanctum', 'throttle:20,1']);
 Route::get('/messages/unread', [MessageController::class, 'totalUnread'])->middleware('auth:sanctum');
