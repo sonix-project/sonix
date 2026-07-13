@@ -24,12 +24,13 @@ export default function UserProfileScreen({ route, navigation }) {
     if (!userId) return;
     setLoading(true);
     try {
-      const [userRes, postsRes, statsRes, statusRes, blockRes] = await Promise.all([
-        client.get(`/users/${userId}`),
-        client.get(`/posts/user/${userId}`),
-        client.get(`/users/${userId}/stats`),
-        client.get(`/follow/${userId}/status`),
-        client.get(`/block/${userId}/status`),
+      const userRes = await client.get(`/users/${userId}`);
+      const realId = userRes.data.id;
+      const [postsRes, statsRes, statusRes, blockRes] = await Promise.all([
+        client.get(`/posts/user/${realId}`),
+        client.get(`/users/${realId}/stats`),
+        client.get(`/follow/${realId}/status`),
+        client.get(`/block/${realId}/status`),
       ]);
       setProfile(userRes.data);
       setPosts(postsRes.data?.data || []);
@@ -48,7 +49,7 @@ export default function UserProfileScreen({ route, navigation }) {
     if (followLoading) return;
     setFollowLoading(true);
     try {
-      const res = await client.post("/follow", { followingId: userId });
+      const res = await client.post("/follow", { following_id: profile.id });
       if (res.data.requested) setFollowState("requested");
       else if (res.data.following) setFollowState("following");
       else setFollowState("none");
@@ -62,7 +63,7 @@ export default function UserProfileScreen({ route, navigation }) {
       { text: t("cancel"), style: "cancel" },
       { text: blocked ? t("unblock") : t("block"), style: "destructive", onPress: async () => {
         try {
-          const res = await client.post("/block", { blockedId: userId });
+          const res = await client.post("/block", { blocked_id: profile.id });
           setBlocked(res.data.blocked);
         } catch (e) { console.warn("Block error", e?.response?.status); }
       }},

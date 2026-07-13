@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, Image } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { COLORS, SIZES } from "../components/Theme";
-import client, { IMAGE_BASE } from "../api/client";
+import client, { resolveUrl } from "../api/client";
 import { useLanguage } from "../context/LanguageContext";
 
 export default function HashtagPostsScreen({ route, navigation }) {
@@ -96,8 +96,3 @@ const s = StyleSheet.create({
   empty: { textAlign: "center", marginTop: 60, color: COLORS.muted, fontSize: SIZES.md },
 });
 
-function resolveUrl(url) {
-  if (!url) return "https://placehold.co/100";
-  if (url.startsWith("http")) return url;
-  return IMAGE_BASE + url;
-}

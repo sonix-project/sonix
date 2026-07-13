@@ -156,7 +156,7 @@ export default function MessagesScreen({ navigation }) {
           <TouchableOpacity style={s.headerBtn} onPress={() => navigation.navigate("CreateGroup")}>
             <Text style={s.headerBtnIcon}>👥</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={s.headerBtn} onPress={() => navigation.navigate("Search")}>
+          <TouchableOpacity style={s.headerBtn} onPress={() => navigation.navigate("CreatePost")}>
             <Text style={s.headerBtnIcon}>✏️</Text>
           </TouchableOpacity>
         </View>

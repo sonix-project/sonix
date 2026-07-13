@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, ActivityIndicator, Alert, Image } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import client from "../api/client";
+import client, { resolveUrl } from "../api/client";
 import { useLanguage } from "../context/LanguageContext";
 import { COLORS, SIZES, FONTS } from "../components/Theme";
 import Screen3D from "../components/3D/Screen3D";
@@ -39,7 +39,7 @@ export default function BlockedUsersScreen({ navigation }) {
 
   const renderItem = useCallback(({ item }) => (
     <View style={s.userRow}>
-      <Image source={{ uri: item.avatar }} style={s.avatar} />
+      <Image source={{ uri: resolveUrl(item.avatar) }} style={s.avatar} />
       <View style={s.userInfo}>
         <Text style={s.username}>{item.username}</Text>
       </View>

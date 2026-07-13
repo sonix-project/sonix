@@ -133,10 +133,10 @@ class StoryController extends Controller
             return response()->json(['message' => 'Validation failed', 'errors' => $e->errors()], 422);
         } catch (\Illuminate\Database\QueryException $e) {
             \Log::error('Story DB error', ['code' => $e->errorInfo[1] ?? null, 'msg' => $e->getMessage()]);
-            return response()->json(['message' => 'Database error: ' . ($e->errorInfo[0] ?? $e->getMessage())], 500);
+            return response()->json(['message' => 'Database error'], 500);
         } catch (\Throwable $e) {
             \Log::error('Story store error', ['msg' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
-            return response()->json(['message' => 'Story creation failed: ' . $e->getMessage()], 500);
+            return response()->json(['message' => 'Story creation failed'], 500);
         }
     }
 

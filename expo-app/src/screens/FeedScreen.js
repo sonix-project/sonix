@@ -284,13 +284,13 @@ export default function FeedScreen({ navigation, route }) {
 
   const likePost = useCallback(async (postId, liked, count) => {
     setPosts((prev) => prev.map((p) => p.id === postId ? { ...p, liked: liked ? 0 : 1, likes_count: count + (liked ? -1 : 1) } : p));
-    try { await client.post("/likes", { postId }); }
+    try { await client.post("/likes", { post_id: postId }); }
     catch (e) { setPosts((prev) => prev.map((p) => p.id === postId ? { ...p, liked: liked ? 1 : 0, likes_count: count } : p)); }
   }, []);
 
   const toggleBookmark = useCallback(async (postId) => {
     setPosts((prev) => prev.map((p) => p.id === postId ? { ...p, bookmarked: !p.bookmarked } : p));
-    try { await client.post("/bookmarks", { postId }); }
+    try { await client.post("/bookmarks", { post_id: postId }); }
     catch (e) { setPosts((prev) => prev.map((p) => p.id === postId ? { ...p, bookmarked: !p.bookmarked } : p)); }
   }, []);
 
@@ -465,7 +465,7 @@ export default function FeedScreen({ navigation, route }) {
             </View>
             <Text style={s.emptyTitle}>{t("emptyFeed")}</Text>
             <Text style={s.emptySub}>{t("followPeople")}</Text>
-            <TouchableOpacity style={s.emptyBtn} onPress={() => navigation.navigate("Search")}>
+            <TouchableOpacity style={s.emptyBtn} onPress={() => navigation.getParent()?.navigate("Explore")}>
               <Text style={s.emptyBtnText}>{t("findPeople")}</Text>
             </TouchableOpacity>
           </View>

@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, LogBox } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AuthProvider } from "./src/context/AuthContext";
 import { LanguageProvider } from "./src/context/LanguageContext";
 import AppNavigator from "./src/navigation/AppNavigator";
+
+LogBox.ignoreLogs(["source.uri should not be an empty string"]);
 
 class ErrorBoundary extends Component {
   state = { error: null, info: null };

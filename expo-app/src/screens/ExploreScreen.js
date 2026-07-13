@@ -3,7 +3,7 @@ import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, 
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
 import { COLORS, SIZES } from "../components/Theme";
-import client, { IMAGE_BASE } from "../api/client";
+import client, { resolveUrl } from "../api/client";
 import { useLanguage } from "../context/LanguageContext";
 
 const { width: SCREEN_W } = Dimensions.get("window");
@@ -140,8 +140,3 @@ const s = StyleSheet.create({
   empty: { textAlign: "center", marginTop: 40, color: COLORS.muted, fontSize: SIZES.md },
 });
 
-function resolveUrl(url) {
-  if (!url) return "https://placehold.co/100";
-  if (url.startsWith("http")) return url;
-  return IMAGE_BASE + url;
-}

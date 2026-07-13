@@ -15,7 +15,7 @@ const MessageBubble = ({ item, isMine }) => {
   return (
     <View style={[s.bubbleRow, isMine ? s.bubbleMine : s.bubbleOther]}>
       <View style={[s.bubble, isMine ? s.bubbleBgMine : s.bubbleBgOther]}>
-        {showName && <Text style={s.senderName}>{item.user?.username || t("unknown")}</Text>}
+        {showName && <Text style={s.senderName}>{item.user?.username || "?"}</Text>}
         {isImage ? (
           <Image source={{ uri: resolveUrl(item.image) }} style={s.bubbleImage} resizeMode="cover" />
         ) : (

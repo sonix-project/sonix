@@ -84,7 +84,6 @@ export default function LoginScreen({ navigation }) {
             {isRTL && <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={s.eyeBtn}><Text style={s.eyeIcon}>{showPassword ? "👁️" : "👁️‍🗨️"}</Text></TouchableOpacity>}
             <TextInput style={s.input} placeholder={t("password")} placeholderTextColor={COLORS.muted} value={password} onChangeText={setPassword} onFocus={() => focusInput("password")} onBlur={() => blurInput("password")} secureTextEntry={!showPassword} textAlign={isRTL ? "right" : "left"} />
             {!isRTL && <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={s.eyeBtn}><Text style={s.eyeIcon}>{showPassword ? "👁️" : "👁️‍🗨️"}</Text></TouchableOpacity>}
-            <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={s.eyeBtn}><Text style={s.eyeIcon}>{showPassword ? "👁️" : "👁️‍🗨️"}</Text></TouchableOpacity>
           </Animated.View>
 
           <TouchableOpacity style={s.forgotBtn} onPress={() => navigation.navigate("ForgotPassword")}>

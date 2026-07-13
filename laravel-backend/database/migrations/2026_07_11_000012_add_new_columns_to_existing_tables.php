@@ -12,8 +12,6 @@ return new class extends Migration
             $table->boolean('two_factor_enabled')->default(false);
             $table->string('two_factor_secret')->nullable();
             $table->boolean('is_verified')->default(false);
-            $table->boolean('is_private')->default(false);
-            $table->text('bio')->nullable();
             $table->string('website')->nullable();
         });
 
@@ -35,7 +33,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['two_factor_enabled', 'two_factor_secret', 'is_verified', 'is_private', 'bio', 'website']);
+            $table->dropColumn(['two_factor_enabled', 'two_factor_secret', 'is_verified', 'website']);
         });
 
         Schema::table('posts', function (Blueprint $table) {

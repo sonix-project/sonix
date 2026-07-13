@@ -30,10 +30,12 @@ export default function CreateGroupScreen({ navigation }) {
     try {
       setLoading(true);
       const res = await client.get("/users/search", { params: { q: search } });
-      const list = (res.data.users || res.data || []).filter((u) => u.id !== user?.id);
+      const data = res.data;
+      const raw = Array.isArray(data) ? data : Array.isArray(data?.users) ? data.users : [];
+      const list = raw.filter((u) => u.id !== user?.id);
       setUsers(list);
     } catch (e) {
-      console.warn("User search error", e);
+      console.warn("User search error", e?.message || e);
     } finally {
       setLoading(false);
     }

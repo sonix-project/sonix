@@ -45,13 +45,18 @@ class UserController extends Controller
 
     public function show(Request $request, $id)
     {
-        $user = User::select('id', 'username', 'bio', 'avatar', 'is_private', 'created_at')
-            ->findOrFail($id);
+        $user = is_numeric($id)
+            ? User::select('id', 'username', 'bio', 'avatar', 'is_private', 'created_at')->find($id)
+            : User::select('id', 'username', 'bio', 'avatar', 'is_private', 'created_at')->where('username', $id)->first();
 
-        if ($request->user()->id != $id) {
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        if ($request->user()->id != $user->id) {
             try {
                 ProfileVisitor::updateOrCreate(
-                    ['user_id' => $id, 'visitor_id' => $request->user()->id],
+                    ['user_id' => $user->id, 'visitor_id' => $request->user()->id],
                     ['updated_at' => now()]
                 );
             } catch (\Throwable $e) {
