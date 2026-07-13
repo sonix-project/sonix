@@ -51,3 +51,10 @@ temp/
 
 # Stray files
 bcrypt*
+
+# Playwright / debug snapshots
+expo-app/*.txt
+expo-app/.playwright-mcp/
+expo-app/expo-server*.log
+expo-app/expo-errors.txt
+expo-app/expo-output.txt
