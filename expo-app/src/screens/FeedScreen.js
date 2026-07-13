@@ -74,7 +74,7 @@ const HeartAnimation = memo(({ show }) => {
   );
 });
 
-const PostCard = memo(({ post, onLike, onBookmark, onComment, onShare, onImagePress, onVideoPress, onMenuPress, onUserPress, onLikesPress, onHashtagPress }) => {
+const PostCard = memo(({ post, currentUser, onLike, onBookmark, onComment, onShare, onImagePress, onVideoPress, onMenuPress, onUserPress, onLikesPress, onHashtagPress }) => {
   const { t } = useLanguage();
   const [showHeart, setShowHeart] = useState(false);
   const lastTap = useRef(0);
@@ -115,7 +115,7 @@ const PostCard = memo(({ post, onLike, onBookmark, onComment, onShare, onImagePr
       <View style={s.cardHeader}>
         <TouchableOpacity style={s.cardHeaderLeft} onPress={() => onUserPress(post.user?.id)} activeOpacity={0.7}>
           {post.user?.avatar ? (
-            <Image source={{ uri: `${resolveUrl(post.user.avatar)}${post.user?.id === user?.id ? "?t=" + Date.now() : ""}` }} style={[s.cardAvatar, { backgroundColor: COLORS.primary + "30" }]} />
+            <Image source={{ uri: `${resolveUrl(post.user.avatar)}${post.user?.id === currentUser?.id ? "?t=" + Date.now() : ""}` }} style={[s.cardAvatar, { backgroundColor: COLORS.primary + "30" }]} />
           ) : (
             <View style={[s.cardAvatar, { backgroundColor: COLORS.primary + "30" }]}>
               <Text style={[s.cardAvatarText, { color: COLORS.primary }]}>{post.user?.username?.[0]?.toUpperCase() || "?"}</Text>
@@ -484,6 +484,7 @@ export default function FeedScreen({ navigation, route }) {
         renderItem={({ item: post }) => (
           <PostCard
             post={post}
+            currentUser={user}
             onLike={likePost}
             onBookmark={toggleBookmark}
             onComment={navigateComments}
