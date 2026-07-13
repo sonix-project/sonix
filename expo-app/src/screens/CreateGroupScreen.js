@@ -20,7 +20,7 @@ export default function CreateGroupScreen({ navigation }) {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (search.length < 1) { setUsers([]); return; }
+      if (search.length < 2) { setUsers([]); return; }
       loadUsers();
     }, 300);
     return () => clearTimeout(timer);
@@ -31,7 +31,7 @@ export default function CreateGroupScreen({ navigation }) {
       setLoading(true);
       const res = await client.get("/users/search", { params: { q: search } });
       const data = res.data;
-      const raw = Array.isArray(data) ? data : Array.isArray(data?.users) ? data.users : [];
+      const raw = Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : Array.isArray(data?.users) ? data.users : [];
       const list = raw.filter((u) => u.id !== user?.id);
       setUsers(list);
     } catch (e) {
