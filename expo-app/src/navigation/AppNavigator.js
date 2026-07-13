@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "../context/AuthContext";
+import { useLanguage } from "../context/LanguageContext";
 import { COLORS, SIZES } from "../components/Theme";
 
 import LoginScreen from "../screens/LoginScreen";
@@ -27,6 +28,8 @@ import SavedPostsScreen from "../screens/SavedPostsScreen";
 const ImageViewerScreen = React.lazy(() => import("../screens/ImageViewerScreen"));
 import SharePostScreen from "../screens/SharePostScreen";
 import LikeListScreen from "../screens/LikeListScreen";
+import GroupChatScreen from "../screens/GroupChatScreen";
+import CreateGroupScreen from "../screens/CreateGroupScreen";
 import EditPostScreen from "../screens/EditPostScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 const CreateStoryScreen = React.lazy(() => import("../screens/CreateStoryScreen"));
@@ -90,7 +93,9 @@ const TabBarIcon = memo(({ label, focused }) => {
 
 function CustomTabBar({ state, navigation }) {
   const insets = useSafeAreaInsets();
+  const { isRTL } = useLanguage();
   const tabs = state.routes;
+  const orderedTabs = isRTL ? [...tabs].reverse() : tabs;
   const floatAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -109,8 +114,9 @@ function CustomTabBar({ state, navigation }) {
           translateY: floatAnim.interpolate({ inputRange: [0, 1], outputRange: [0, -4] }),
         }],
       }]}>
-        {tabs.map((route, index) => {
-          const isFocused = state.index === index;
+        {orderedTabs.map((route) => {
+          const originalIndex = tabs.indexOf(route);
+          const isFocused = state.index === originalIndex;
           const isCreate = route.name === "Create";
 
           if (isCreate) {
@@ -237,6 +243,8 @@ export default function AppNavigator() {
           <Stack.Screen name="UserProfile" component={UserProfileScreen} />
           <Stack.Screen name="Followers" component={FollowersScreen} />
           <Stack.Screen name="Chat" component={ChatScreen} />
+          <Stack.Screen name="GroupChat" component={GroupChatScreen} />
+          <Stack.Screen name="CreateGroup" component={CreateGroupScreen} />
           <Stack.Screen name="Comments" component={CommentsScreen} />
           <Stack.Screen name="Camera" component={CameraScreen} options={{ animation: "slide_from_bottom" }} />
           <Stack.Screen name="StoryViewer" component={StoryViewerScreen} options={{ animation: "fade" }} />

@@ -95,6 +95,7 @@ function formatTime(dateStr, t) {
 export default function MessagesScreen({ navigation }) {
   const { t } = useLanguage();
   const [conversations, setConversations] = useState([]);
+  const [groups, setGroups] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [search, setSearch] = useState("");
   const { user } = useAuth();
@@ -102,6 +103,7 @@ export default function MessagesScreen({ navigation }) {
 
   const load = useCallback(async () => {
     try { const res = await client.get("/messages/conversations"); setConversations(res.data || []); } catch (e) { console.warn("Conversations error", e?.response?.status); }
+    try { const res = await client.get("/groups"); setGroups(res.data || []); } catch (e) { console.warn("Groups error", e?.response?.status); }
   }, []);
 
   useEffect(() => { load(); }, [load]);
@@ -129,15 +131,31 @@ export default function MessagesScreen({ navigation }) {
     try { await client.post(`/messages/pin/${userId}`); load(); } catch (e) {}
   };
 
-  const filtered = search
+  const groupFiltered = search
+    ? groups.filter((g) => g.name.toLowerCase().includes(search.toLowerCase()))
+    : groups;
+  const convFiltered = search
     ? conversations.filter((c) => c.user.username.toLowerCase().includes(search.toLowerCase()))
     : conversations;
+
+  const data = [];
+  if (groupFiltered.length > 0 && !search) {
+    data.push({ type: "section", key: "groups", label: t("groups") });
+    groupFiltered.forEach((g) => data.push({ type: "group", ...g }));
+  }
+  if (convFiltered.length > 0) {
+    data.push({ type: "section", key: "conversations", label: t("messages") });
+    convFiltered.forEach((c) => data.push({ type: "conv", ...c }));
+  }
 
   return (
     <Screen3D style={[s.container, { paddingTop: insets.top }]}>
       <View style={s.header}>
         <Text style={s.title}>{t("messages")}</Text>
         <View style={s.headerActions}>
+          <TouchableOpacity style={s.headerBtn} onPress={() => navigation.navigate("CreateGroup")}>
+            <Text style={s.headerBtnIcon}>👥</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={s.headerBtn} onPress={() => navigation.navigate("Search")}>
             <Text style={s.headerBtnIcon}>✏️</Text>
           </TouchableOpacity>
@@ -161,8 +179,8 @@ export default function MessagesScreen({ navigation }) {
       </View>
 
       <FlatList
-        data={filtered}
-        keyExtractor={(c) => String(c.user.id)}
+        data={data}
+        keyExtractor={(item, i) => item.key || String(item.id || i)}
         contentContainerStyle={{ paddingBottom: Math.max(insets.bottom + 80, 100) }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={COLORS.primary} colors={[COLORS.primary]} />}
         ListEmptyComponent={
@@ -174,25 +192,46 @@ export default function MessagesScreen({ navigation }) {
             <Text style={s.emptySub}>{search ? t("tryDifferentSearch") : t("startConversation")}</Text>
           </View>
         }
-        renderItem={({ item }) => (
-          <ConversationItem
-            item={item}
-            onPress={() => navigation.navigate("Chat", { userId: item.user.id, username: item.user.username })}
-            onLongPress={() => {
-              Alert.alert(item.user.username, null, [
-                { text: item.is_pinned ? t("unpin") : t("pin"), onPress: () => togglePin(item.user.id) },
-                { text: item.is_muted ? t("unmute") : t("mute"), onPress: () => toggleMute(item.user.id) },
-                { text: t("delete"), style: "destructive", onPress: () => deleteConversation(item.user.id, item.user.username) },
-                { text: t("cancel"), style: "cancel" },
-              ]);
-            }}
-            onDelete={deleteConversation}
-            onMute={toggleMute}
-            onPin={togglePin}
-            t={t}
-            currentUser={user}
-          />
-        )}
+        renderItem={({ item }) => {
+          if (item.type === "section") {
+            return <Text style={s.sectionHeader}>{item.label}</Text>;
+          }
+          if (item.type === "group") {
+            return (
+              <TouchableOpacity style={s.groupRow} onPress={() => navigation.navigate("GroupChat", { groupId: item.id, groupName: item.name })} activeOpacity={0.7}>
+                <View style={s.groupAvatar}>
+                  <Text style={s.groupAvatarText}>👥</Text>
+                </View>
+                <View style={s.info}>
+                  <Text style={s.name} numberOfLines={1}>{item.name}</Text>
+                  <Text style={s.preview} numberOfLines={1}>
+                    {item.last_message ? `${item.last_message.username}: ${item.last_message.content}` : t("startConv")}
+                  </Text>
+                </View>
+                <Text style={s.memberCount}>{item.members_count}{t("members")}</Text>
+              </TouchableOpacity>
+            );
+          }
+          return (
+            <ConversationItem
+              item={item}
+              onPress={() => navigation.navigate("Chat", { userId: item.user.id, username: item.user.username })}
+              onLongPress={() => {
+                Alert.alert(item.user.username, null, [
+                  { text: item.is_pinned ? t("unpin") : t("pin"), onPress: () => togglePin(item.user.id) },
+                  { text: item.is_muted ? t("unmute") : t("mute"), onPress: () => toggleMute(item.user.id) },
+                  { text: t("delete"), style: "destructive", onPress: () => deleteConversation(item.user.id, item.user.username) },
+                  { text: t("cancel"), style: "cancel" },
+                ]);
+              }}
+              onDelete={deleteConversation}
+              onMute={toggleMute}
+              onPin={togglePin}
+              t={t}
+              currentUser={user}
+            />
+          );
+        }}
       />
     </Screen3D>
   );
@@ -209,6 +248,11 @@ const s = StyleSheet.create({
   searchIcon: { fontSize: 16 },
   searchInput: { flex: 1, color: COLORS.text, fontSize: SIZES.md },
   clearBtn: { color: COLORS.muted, fontSize: 16, padding: 4 },
+  sectionHeader: { fontSize: SIZES.sm, fontWeight: "700", color: COLORS.muted, textTransform: "uppercase", letterSpacing: 1, paddingHorizontal: 16, paddingTop: 16, paddingBottom: 4 },
+  groupRow: { flexDirection: "row", alignItems: "center", paddingHorizontal: 16, paddingVertical: 12, gap: 12 },
+  groupAvatar: { width: 52, height: 52, borderRadius: 26, backgroundColor: COLORS.primary + "25", alignItems: "center", justifyContent: "center" },
+  groupAvatarText: { fontSize: 24 },
+  memberCount: { fontSize: SIZES.xs, color: COLORS.muted },
   rowWrap: { overflow: "hidden" },
   swipeActions: { position: "absolute", right: 0, top: 0, bottom: 0, flexDirection: "row", alignItems: "center" },
   swipeAction: { width: 40, height: 70, alignItems: "center", justifyContent: "center", marginLeft: 2 },

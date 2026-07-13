@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\PostStatsController;
 use App\Http\Controllers\Api\TwoFactorController;
 use App\Http\Controllers\Api\BadWordController;
 use App\Http\Controllers\Api\SupportController;
+use App\Http\Controllers\Api\GroupController;
 
 Route::post('/auth/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
 Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
@@ -143,6 +144,16 @@ Route::get('/reels/{id}', [ReelController::class, 'show'])->middleware('auth:san
 Route::delete('/reels/{id}', [ReelController::class, 'destroy'])->middleware('auth:sanctum');
 Route::post('/reels/{id}/like', [ReelController::class, 'like'])->middleware(['auth:sanctum', 'throttle:30,1']);
 Route::post('/reels/{id}/comment', [ReelController::class, 'comment'])->middleware(['auth:sanctum', 'throttle:20,1']);
+
+// Group Chat
+Route::get('/groups', [GroupController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/groups', [GroupController::class, 'store'])->middleware(['auth:sanctum', 'throttle:10,1']);
+Route::get('/groups/{id}', [GroupController::class, 'show'])->middleware('auth:sanctum');
+Route::post('/groups/{id}/members', [GroupController::class, 'addMembers'])->middleware('auth:sanctum');
+Route::delete('/groups/{id}/members/{userId}', [GroupController::class, 'removeMember'])->middleware('auth:sanctum');
+Route::post('/groups/{id}/messages', [GroupController::class, 'sendMessage'])->middleware(['auth:sanctum', 'throttle:20,1']);
+Route::get('/groups/{id}/messages', [GroupController::class, 'messages'])->middleware('auth:sanctum');
+Route::delete('/groups/{id}', [GroupController::class, 'destroy'])->middleware('auth:sanctum');
 
 // Voice Messages
 Route::post('/voice-messages', [VoiceMessageController::class, 'store'])->middleware(['auth:sanctum', 'throttle:10,1']);

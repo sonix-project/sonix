@@ -31,7 +31,7 @@ function Logo3D() {
 }
 
 export default function LoginScreen({ navigation }) {
-  const { t } = useLanguage();
+  const { t, isRTL } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -75,14 +75,15 @@ export default function LoginScreen({ navigation }) {
         <Animated.View style={[s.card, { opacity: cardAnim.interpolate({ inputRange: [0, 1], outputRange: [0, 1] }), transform: [{ translateY: cardAnim.interpolate({ inputRange: [0, 1], outputRange: [40, 0] }) }, { perspective: 1000 }, { rotateX: cardAnim.interpolate({ inputRange: [0, 1], outputRange: ["10deg", "0deg"] }) }] }]}>
           <View style={s.cardGlow} />
 
-          <Animated.View style={[s.inputWrap, focusedField === "email" && s.inputWrapActive, { transform: [{ scale: inputAnims.email.interpolate({ inputRange: [0, 1], outputRange: [1, 1.02] }) }], shadowOpacity: inputAnims.email.interpolate({ inputRange: [0, 1], outputRange: [0.1, 0.4] }) }]}>
+          <Animated.View style={[s.inputWrap, focusedField === "email" && s.inputWrapActive, isRTL && s.inputWrapRtl, { transform: [{ scale: inputAnims.email.interpolate({ inputRange: [0, 1], outputRange: [1, 1.02] }) }], shadowOpacity: inputAnims.email.interpolate({ inputRange: [0, 1], outputRange: [0.1, 0.4] }) }]}>
+            <TextInput style={s.input} placeholder={t("email")} placeholderTextColor={COLORS.muted} value={email} onChangeText={setEmail} onFocus={() => focusInput("email")} onBlur={() => blurInput("email")} autoCapitalize="none" keyboardType="email-address" textAlign={isRTL ? "right" : "left"} />
             <View style={[s.inputIconWrap, focusedField === "email" && s.inputIconActive]}><Text style={s.inputIcon}>✉️</Text></View>
-            <TextInput style={s.input} placeholder={t("email")} placeholderTextColor={COLORS.muted} value={email} onChangeText={setEmail} onFocus={() => focusInput("email")} onBlur={() => blurInput("email")} autoCapitalize="none" keyboardType="email-address" textAlign="right" />
           </Animated.View>
 
-          <Animated.View style={[s.inputWrap, focusedField === "password" && s.inputWrapActive, { transform: [{ scale: inputAnims.password.interpolate({ inputRange: [0, 1], outputRange: [1, 1.02] }) }], shadowOpacity: inputAnims.password.interpolate({ inputRange: [0, 1], outputRange: [0.1, 0.4] }) }]}>
-            <View style={[s.inputIconWrap, focusedField === "password" && s.inputIconActive]}><Text style={s.inputIcon}>🔒</Text></View>
-            <TextInput style={s.input} placeholder={t("password")} placeholderTextColor={COLORS.muted} value={password} onChangeText={setPassword} onFocus={() => focusInput("password")} onBlur={() => blurInput("password")} secureTextEntry={!showPassword} textAlign="right" />
+          <Animated.View style={[s.inputWrap, focusedField === "password" && s.inputWrapActive, isRTL && s.inputWrapRtl, { transform: [{ scale: inputAnims.password.interpolate({ inputRange: [0, 1], outputRange: [1, 1.02] }) }], shadowOpacity: inputAnims.password.interpolate({ inputRange: [0, 1], outputRange: [0.1, 0.4] }) }]}>
+            {isRTL && <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={s.eyeBtn}><Text style={s.eyeIcon}>{showPassword ? "👁️" : "👁️‍🗨️"}</Text></TouchableOpacity>}
+            <TextInput style={s.input} placeholder={t("password")} placeholderTextColor={COLORS.muted} value={password} onChangeText={setPassword} onFocus={() => focusInput("password")} onBlur={() => blurInput("password")} secureTextEntry={!showPassword} textAlign={isRTL ? "right" : "left"} />
+            {!isRTL && <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={s.eyeBtn}><Text style={s.eyeIcon}>{showPassword ? "👁️" : "👁️‍🗨️"}</Text></TouchableOpacity>}
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={s.eyeBtn}><Text style={s.eyeIcon}>{showPassword ? "👁️" : "👁️‍🗨️"}</Text></TouchableOpacity>
           </Animated.View>
 
@@ -138,6 +139,7 @@ const s = StyleSheet.create({
 
   inputWrap: { flexDirection: "row", alignItems: "center", backgroundColor: COLORS.input, borderRadius: 16, paddingHorizontal: 14, height: 54, gap: 10, borderWidth: 1.5, borderColor: COLORS.border, marginBottom: 14, shadowColor: COLORS.primary, shadowOffset: { width: 0, height: 4 }, shadowRadius: 12, elevation: 5 },
   inputWrapActive: { borderColor: COLORS.primary, backgroundColor: "rgba(26,26,46,0.9)" },
+  inputWrapRtl: { flexDirection: "row-reverse" },
   inputIconWrap: { width: 34, height: 34, borderRadius: 10, backgroundColor: "rgba(124,108,247,0.1)", alignItems: "center", justifyContent: "center" },
   inputIconActive: { backgroundColor: "rgba(124,108,247,0.2)" },
   inputIcon: { fontSize: 15 },

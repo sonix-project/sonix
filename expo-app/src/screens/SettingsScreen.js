@@ -10,7 +10,7 @@ import Screen3D from "../components/3D/Screen3D";
 export default function SettingsScreen({ navigation }) {
   const insets = useSafeAreaInsets();
   const { logout } = useAuth();
-  const { lang, changeLanguage, t } = useLanguage();
+  const { lang, changeLanguage, t, isRTL, rtlRow } = useLanguage();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [deletePassword, setDeletePassword] = useState("");
@@ -121,7 +121,7 @@ export default function SettingsScreen({ navigation }) {
         <View style={s.section}>
           <Text style={s.sectionTitle}>{t("language").toUpperCase()}</Text>
 
-          <TouchableOpacity style={s.row} onPress={() => setShowLanguage(!showLanguage)}>
+          <TouchableOpacity style={[s.row, isRTL && s.rowRtl]} onPress={() => setShowLanguage(!showLanguage)}>
             <Text style={s.rowIcon}>🌐</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("language")}</Text>
@@ -155,7 +155,7 @@ export default function SettingsScreen({ navigation }) {
         <View style={s.section}>
           <Text style={s.sectionTitle}>{t("account").toUpperCase()}</Text>
 
-          <TouchableOpacity style={s.row} onPress={() => navigation.navigate("EditProfile")}>
+          <TouchableOpacity style={[s.row, isRTL && s.rowRtl]} onPress={() => navigation.navigate("EditProfile")}>
             <Text style={s.rowIcon}>👤</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("editProfile")}</Text>
@@ -164,7 +164,7 @@ export default function SettingsScreen({ navigation }) {
             <Text style={s.rowArrow}>›</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={s.row} onPress={() => setShowChangePassword(!showChangePassword)}>
+          <TouchableOpacity style={[s.row, isRTL && s.rowRtl]} onPress={() => setShowChangePassword(!showChangePassword)}>
             <Text style={s.rowIcon}>🔒</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("changePassword")}</Text>
@@ -183,7 +183,7 @@ export default function SettingsScreen({ navigation }) {
             </View>
           )}
 
-          <View style={s.row}>
+          <View style={[s.row, isRTL && s.rowRtl]}>
             <Text style={s.rowIcon}>🔐</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("privateAccount")}</Text>
@@ -203,7 +203,7 @@ export default function SettingsScreen({ navigation }) {
         <View style={s.section}>
           <Text style={s.sectionTitle}>{t("notificationsSection").toUpperCase()}</Text>
 
-          <View style={s.row}>
+          <View style={[s.row, isRTL && s.rowRtl]}>
             <Text style={s.rowIcon}>🔔</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("pushNotifications")}</Text>
@@ -218,7 +218,7 @@ export default function SettingsScreen({ navigation }) {
             />
           </View>
 
-          <View style={s.row}>
+          <View style={[s.row, isRTL && s.rowRtl]}>
             <Text style={s.rowIcon}>✉️</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("emailNotifications")}</Text>
@@ -233,7 +233,7 @@ export default function SettingsScreen({ navigation }) {
             />
           </View>
 
-          <View style={s.row}>
+          <View style={[s.row, isRTL && s.rowRtl]}>
             <Text style={s.rowIcon}>❤️</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("likeNotifications")}</Text>
@@ -248,7 +248,7 @@ export default function SettingsScreen({ navigation }) {
             />
           </View>
 
-          <View style={s.row}>
+          <View style={[s.row, isRTL && s.rowRtl]}>
             <Text style={s.rowIcon}>💬</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("commentNotifications")}</Text>
@@ -263,7 +263,7 @@ export default function SettingsScreen({ navigation }) {
             />
           </View>
 
-          <View style={s.row}>
+          <View style={[s.row, isRTL && s.rowRtl]}>
             <Text style={s.rowIcon}>👥</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("followNotifications")}</Text>
@@ -278,7 +278,7 @@ export default function SettingsScreen({ navigation }) {
             />
           </View>
 
-          <View style={s.row}>
+          <View style={[s.row, isRTL && s.rowRtl]}>
             <Text style={s.rowIcon}>📩</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("messageNotifications")}</Text>
@@ -298,7 +298,7 @@ export default function SettingsScreen({ navigation }) {
         <View style={s.section}>
           <Text style={s.sectionTitle}>{t("content").toUpperCase()}</Text>
 
-          <TouchableOpacity style={s.row} onPress={() => navigation.navigate("SavedPosts")}>
+          <TouchableOpacity style={[s.row, isRTL && s.rowRtl]} onPress={() => navigation.navigate("SavedPosts")}>
             <Text style={s.rowIcon}>🔖</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("savedPostsBtn")}</Text>
@@ -307,7 +307,7 @@ export default function SettingsScreen({ navigation }) {
             <Text style={s.rowArrow}>›</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={s.row} onPress={() => navigation.navigate("BlockedUsers")}>
+          <TouchableOpacity style={[s.row, isRTL && s.rowRtl]} onPress={() => navigation.navigate("BlockedUsers")}>
             <Text style={s.rowIcon}>📌</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("blockedUsers")}</Text>
@@ -316,7 +316,7 @@ export default function SettingsScreen({ navigation }) {
             <Text style={s.rowArrow}>›</Text>
           </TouchableOpacity>
 
-          <View style={s.row}>
+          <View style={[s.row, isRTL && s.rowRtl]}>
             <Text style={s.rowIcon}>🕐</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("activityStatus")}</Text>
@@ -334,7 +334,7 @@ export default function SettingsScreen({ navigation }) {
         <View style={s.section}>
           <Text style={s.sectionTitle}>{t("support").toUpperCase()}</Text>
 
-          <TouchableOpacity style={s.row} onPress={() => navigation.navigate("HelpCenter")}>
+          <TouchableOpacity style={[s.row, isRTL && s.rowRtl]} onPress={() => navigation.navigate("HelpCenter")}>
             <Text style={s.rowIcon}>❓</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("helpCenter")}</Text>
@@ -343,7 +343,7 @@ export default function SettingsScreen({ navigation }) {
             <Text style={s.rowArrow}>›</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={s.row} onPress={() => navigation.navigate("ReportProblem")}>
+          <TouchableOpacity style={[s.row, isRTL && s.rowRtl]} onPress={() => navigation.navigate("ReportProblem")}>
             <Text style={s.rowIcon}>⚠️</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("reportProblem")}</Text>
@@ -352,7 +352,7 @@ export default function SettingsScreen({ navigation }) {
             <Text style={s.rowArrow}>›</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={s.row} onPress={() => navigation.navigate("Terms")}>
+          <TouchableOpacity style={[s.row, isRTL && s.rowRtl]} onPress={() => navigation.navigate("Terms")}>
             <Text style={s.rowIcon}>📋</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("termsOfService")}</Text>
@@ -360,7 +360,7 @@ export default function SettingsScreen({ navigation }) {
             <Text style={s.rowArrow}>›</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={s.row} onPress={() => navigation.navigate("Privacy")}>
+          <TouchableOpacity style={[s.row, isRTL && s.rowRtl]} onPress={() => navigation.navigate("Privacy")}>
             <Text style={s.rowIcon}>🛡️</Text>
             <View style={s.rowContent}>
               <Text style={s.rowLabel}>{t("privacyPolicy")}</Text>
@@ -390,7 +390,7 @@ export default function SettingsScreen({ navigation }) {
         <View style={s.section}>
           <Text style={[s.sectionTitle, { color: COLORS.danger }]}>{t("dangerZone").toUpperCase()}</Text>
 
-          <TouchableOpacity style={s.row} onPress={handleLogout}>
+          <TouchableOpacity style={[s.row, isRTL && s.rowRtl]} onPress={handleLogout}>
             <Text style={s.rowIcon}>🚪</Text>
             <View style={s.rowContent}>
               <Text style={[s.rowLabel, { color: COLORS.warning }]}>{t("logout")}</Text>
@@ -399,7 +399,7 @@ export default function SettingsScreen({ navigation }) {
             <Text style={s.rowArrow}>›</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={s.row} onPress={() => setShowDeleteAccount(!showDeleteAccount)}>
+          <TouchableOpacity style={[s.row, isRTL && s.rowRtl]} onPress={() => setShowDeleteAccount(!showDeleteAccount)}>
             <Text style={s.rowIcon}>🗑️</Text>
             <View style={s.rowContent}>
               <Text style={[s.rowLabel, { color: COLORS.danger }]}>{t("deleteAccount")}</Text>
@@ -433,6 +433,7 @@ const s = StyleSheet.create({
   section: { paddingHorizontal: 16, marginTop: 20 },
   sectionTitle: { fontSize: 13, ...FONTS.bold, color: COLORS.muted, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 },
   row: { flexDirection: "row", alignItems: "center", paddingVertical: 14, borderBottomWidth: 0.5, borderBottomColor: COLORS.border, gap: 12 },
+  rowRtl: { flexDirection: "row-reverse" },
   rowIcon: { fontSize: 20, width: 30, textAlign: "center" },
   rowContent: { flex: 1 },
   rowLabel: { fontSize: SIZES.lg, ...FONTS.medium, color: COLORS.text },

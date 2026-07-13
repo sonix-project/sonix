@@ -150,8 +150,48 @@ class EnsureFeatureTables extends Command
             $this->info("Successfully added {$missingMessageColumns} missing column(s) to messages table");
         }
 
-        if ($created > 0) {
-            $this->info("Successfully created {$created} missing table(s)");
+        // Group chat tables
+        $groupTablesCreated = 0;
+        if (!Schema::hasTable('groups')) {
+            Schema::create('groups', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('avatar')->nullable();
+                $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+                $table->timestamps();
+            });
+            $this->info('Created groups table');
+            $groupTablesCreated++;
+        }
+        if (!Schema::hasTable('group_members')) {
+            Schema::create('group_members', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('group_id')->constrained('groups')->onDelete('cascade');
+                $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+                $table->string('role')->default('member');
+                $table->timestamp('joined_at')->useCurrent();
+                $table->timestamps();
+                $table->unique(['group_id', 'user_id']);
+            });
+            $this->info('Created group_members table');
+            $groupTablesCreated++;
+        }
+        if (!Schema::hasTable('group_messages')) {
+            Schema::create('group_messages', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('group_id')->constrained('groups')->onDelete('cascade');
+                $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+                $table->text('content')->nullable();
+                $table->string('type')->default('text');
+                $table->string('image')->nullable();
+                $table->timestamps();
+            });
+            $this->info('Created group_messages table');
+            $groupTablesCreated++;
+        }
+
+        if ($created > 0 || $groupTablesCreated > 0) {
+            $this->info("Successfully created {$created} missing table(s) and {$groupTablesCreated} group table(s)");
         } else {
             $this->info('All feature tables already exist');
         }

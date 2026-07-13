@@ -31,9 +31,18 @@ export function LanguageProvider({ children }) {
     [lang]
   );
 
-  const isArabic = useMemo(() => lang === "ar", [lang]);
+  const isRTL = useMemo(() => lang === "ar", [lang]);
+  const direction = useMemo(() => (isRTL ? "rtl" : "ltr"), [isRTL]);
 
-  const value = useMemo(() => ({ lang, changeLanguage, t, isArabic, loading }), [lang, changeLanguage, t, isArabic, loading]);
+  const rtlRow = useMemo(() => ({ flexDirection: isRTL ? "row-reverse" : "row" }), [isRTL]);
+  const rtlRowReverse = useMemo(() => ({ flexDirection: isRTL ? "row" : "row-reverse" }), [isRTL]);
+  const alignStart = useMemo(() => ({ textAlign: isRTL ? "right" : "left" }), [isRTL]);
+  const alignEnd = useMemo(() => ({ textAlign: isRTL ? "left" : "right" }), [isRTL]);
+
+  const value = useMemo(() => ({
+    lang, changeLanguage, t, isRTL, direction,
+    rtlRow, rtlRowReverse, alignStart, alignEnd,
+  }), [lang, changeLanguage, t, isRTL, direction, rtlRow, rtlRowReverse, alignStart, alignEnd]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }

@@ -186,6 +186,16 @@ const translations = {
     pin: "Pin",
     unmute: "Unmute",
     mute: "Mute",
+    groups: "Groups",
+    newGroup: "New Group",
+    createGroup: "Create Group",
+    groupName: "Group name",
+    addMembers: "Add members",
+    noGroups: "No groups yet",
+    groupCreated: "Group created!",
+    groupChat: "Group Chat",
+    members: "members",
+    leaveGroup: "Leave Group",
 
     // Chat
     online: "Online",
@@ -597,6 +607,16 @@ const translations = {
     pin: "تثبيت",
     unmute: "إلغاء الكتم",
     mute: "كتم",
+    groups: "المجموعات",
+    newGroup: "مجموعة جديدة",
+    createGroup: "إنشاء مجموعة",
+    groupName: "اسم المجموعة",
+    addMembers: "إضافة أعضاء",
+    noGroups: "لا توجد مجموعات بعد",
+    groupCreated: "تم إنشاء المجموعة!",
+    groupChat: "محادثة جماعية",
+    members: "أعضاء",
+    leaveGroup: "مغادرة المجموعة",
 
     // Chat
     online: "متصل",

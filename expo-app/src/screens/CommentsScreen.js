@@ -18,7 +18,7 @@ function renderLinkable(text) {
 }
 
 export default function CommentsScreen({ route, navigation }) {
-  const { t } = useLanguage();
+  const { t, isRTL } = useLanguage();
   const { postId } = route.params;
   const [comments, setComments] = useState([]);
   const [text, setText] = useState("");
@@ -79,7 +79,7 @@ export default function CommentsScreen({ route, navigation }) {
           }
           renderItem={({ item: c }) => (
             <TouchableOpacity
-              style={s.row}
+              style={[s.row, isRTL && { flexDirection: "row-reverse" }]}
               onLongPress={() => c.user?.id === user?.id && deleteComment(c.id)}
               activeOpacity={0.7}
             >
