@@ -2,72 +2,159 @@
   <img src="assets/logo.png" alt="Sonix Logo" width="120" height="120" />
 </p>
 
-<h1 align="center">Sonix — Social Media App</h1>
+<h1 align="center">Sonix — Full-Stack Social Media Platform</h1>
 
 <p align="center">
-  Full-stack social media application built with <strong>Laravel 11</strong> (backend API) and <strong>React Native / Expo SDK 57</strong> (mobile app).
+  A production-ready social media application built with <strong>Laravel 13</strong> (Backend API) and <strong>React Native / Expo SDK 57</strong> (Mobile App).
 </p>
+
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#tech-stack">Tech Stack</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#api-reference">API</a> •
+  <a href="#deployment">Deployment</a> •
+  <a href="#customization">Customization</a> •
+  <a href="#license">License</a>
+</p>
+
+---
+
+## Overview
+
+Sonix is a **full-featured social media platform** comparable to Instagram, Snapchat, and TikTok. It includes:
+
+- **35 screens** with smooth animations
+- **95+ API endpoints** with rate limiting
+- **33 database models** with 56 migrations
+- **Full RTL support** (Arabic + English)
+- **Voice messages** with animated waveform
+- **Vanish mode** (auto-delete messages)
+- **Group chat** with real-time indicators
+- **Stories** with stickers, drawing, and analytics
+- **Docker deployment** ready
 
 ---
 
 ## Features
 
-| # | Feature | Status |
-|---|---------|--------|
-| 1 | Authentication (register, login, logout, password reset) | ✅ |
-| 2 | Posts (create, edit, delete, like, bookmark, hashtag) | ✅ |
-| 3 | Feed with infinite scroll, stories, and explore page | ✅ |
-| 4 | Comments with @mentions and #hashtag highlighting | ✅ |
-| 5 | User profiles (follow/unfollow, private accounts, stats) | ✅ |
-| 6 | Real-time messaging (1-on-1 chat with text, voice, images) | ✅ |
-| 7 | **Group chat** (create groups, add members, group messaging) | ✅ |
-| 8 | **Full RTL support** (Arabic + English with auto-direction) | ✅ |
-| 9 | Push notifications with preference toggles | ✅ |
-| 10 | Notification preferences (6 customizable toggles) | ✅ |
-| 11 | Settings screens (blocked users, help, report, terms, privacy) | ✅ |
-| 12 | **External post sharing** (native share sheet) | ✅ |
-| 13 | **Hashtag feed** (tap #hashtag to see all posts) | ✅ |
-| 14 | **@mention autocomplete** in post composer | ✅ |
-| 15 | **Explore / Discover page** (trending posts + suggested users) | ✅ |
-| 16 | Stories (create, view, react, highlights) | ✅ |
-| 17 | Profile customization (bio, avatar, website, private toggle) | ✅ |
-| 18 | Search users | ✅ |
-| 19 | View profile visitors, badges, and profile templates | ✅ |
-| 20 | Bookmark / saved posts | ✅ |
+### Core
+| Feature | Status |
+|---------|--------|
+| Authentication (Register, Login, Password Reset) | ✅ |
+| 2FA Authentication | ✅ |
+| Profile Management (Avatar, Bio, Username) | ✅ |
+| Private Accounts | ✅ |
+| Push Notifications | ✅ |
+
+### Social
+| Feature | Status |
+|---------|--------|
+| Create Posts (Text/Image/Video) | ✅ |
+| Like/Unlike Posts | ✅ |
+| Comments with @Mentions | ✅ |
+| Bookmarks/Saved Posts | ✅ |
+| Share Posts (Native Share Sheet) | ✅ |
+| Hashtag Feed (#Tag) | ✅ |
+| Post Statistics & View Tracking | ✅ |
+| Pin/Unpin Posts | ✅ |
+
+### Stories
+| Feature | Status |
+|---------|--------|
+| Create Stories (Image/Video/Text) | ✅ |
+| Story Reactions | ✅ |
+| Story Analytics | ✅ |
+| Story Highlights | ✅ |
+| Forward Stories | ✅ |
+
+### Messaging
+| Feature | Status |
+|---------|--------|
+| 1:1 Direct Messages | ✅ |
+| Voice Messages (Record & Play) | ✅ |
+| Image Messages | ✅ |
+| Message Reactions (Emoji) | ✅ |
+| Typing Indicators | ✅ |
+| Read Receipts | ✅ |
+| Vanish Mode (Auto-Delete) | ✅ |
+| Forward Messages | ✅ |
+| Mute/Pin Conversations | ✅ |
+| Delete Conversation | ✅ |
+
+### Group Chat
+| Feature | Status |
+|---------|--------|
+| Create Groups | ✅ |
+| Add/Remove Members | ✅ |
+| Group Messages | ✅ |
+
+### Discovery
+| Feature | Status |
+|---------|--------|
+| Explore/Discover Page | ✅ |
+| Trending Posts | ✅ |
+| Suggested Users | ✅ |
+| User Search (with History) | ✅ |
+
+### Safety
+| Feature | Status |
+|---------|--------|
+| Block Users | ✅ |
+| Report Content | ✅ |
+| Bad Word Filter | ✅ |
+| Anti-Scraping Middleware | ✅ |
+| Security Headers | ✅ |
+
+### Additional
+| Feature | Status |
+|---------|--------|
+| Profile Visitors | ✅ |
+| User Badges | ✅ |
+| Profile Templates | ✅ |
+| Short Video Reels | ✅ |
+| Full RTL Support (Arabic) | ✅ |
+| Dual Language (EN/AR) | ✅ |
 
 ---
 
 ## Tech Stack
 
 ### Backend
-- **Framework**: Laravel 11
-- **Database**: PostgreSQL (MySQL compatible)
-- **Auth**: Laravel Sanctum (token-based)
-- **Storage**: Local / S3-compatible
-- **Queue**: Database (sync driver fallback)
+- **Language:** PHP 8.3
+- **Framework:** Laravel 13.8
+- **Database:** PostgreSQL 15+ (MySQL compatible)
+- **Auth:** Laravel Sanctum 4.3
+- **Media:** Cloudinary
+- **Queue/Cache:** Redis
+- **Real-time:** Laravel Reverb
+- **Server:** PHP-FPM + Nginx
+- **Container:** Docker
 
 ### Mobile App
-- **Framework**: React Native 0.86 + Expo SDK 57
-- **Navigation**: React Navigation 7
-- **Language**: JavaScript
-- **HTTP Client**: Axios
-- **Animations**: React Native Reanimated
+- **Framework:** React Native 0.86
+- **SDK:** Expo 57
+- **Navigation:** React Navigation 7
+- **Animations:** React Native Reanimated 4.5
+- **HTTP Client:** Axios 1.7
+- **Camera:** expo-camera 57
+- **Audio:** expo-audio 57
+- **Video:** expo-video 57
 
 ---
 
 ## Requirements
 
 ### Backend
-- PHP 8.2+
+- PHP 8.3+
 - Composer 2.x
 - PostgreSQL 15+ (or MySQL 8+)
-- Redis (optional — falls back gracefully)
+- Redis (optional)
 
 ### Mobile App
 - Node.js 20+
 - npm or yarn
 - Expo CLI
-- Android Studio or Xcode (for native builds)
 
 ---
 
@@ -82,25 +169,26 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-Configure your database in `.env`:
+Configure your `.env` file:
 
-```
+```env
 DB_CONNECTION=pgsql
 DB_HOST=127.0.0.1
 DB_PORT=5432
 DB_DATABASE=sonix
 DB_USERNAME=postgres
 DB_PASSWORD=secret
+
+CLOUDINARY_URL=cloudinary://api_key:api_secret@cloud_name
 ```
 
-Run migrations and seed test data:
+Run migrations:
 
 ```bash
 php artisan migrate
-php artisan db:seed --class=TestUserSeeder
 ```
 
-Start the development server:
+Start the server:
 
 ```bash
 php artisan serve
@@ -115,8 +203,8 @@ npm install
 
 Create `expo-app/.env`:
 
-```
-API_URL=http://192.168.x.x:8000/api
+```env
+EXPO_PUBLIC_API_URL=http://192.168.x.x:8000/api
 ```
 
 Start Expo:
@@ -125,122 +213,66 @@ Start Expo:
 npx expo start
 ```
 
-Scan the QR code with Expo Go (Android) or run on an emulator.
-
 ---
 
-## API Endpoints
+## API Reference
 
 ### Authentication
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/api/register` | No | Create account |
-| POST | `/api/login` | No | Login |
-| POST | `/api/logout` | Yes | Logout |
-| POST | `/api/forgot-password` | No | Send reset code |
-| POST | `/api/reset-password` | No | Verify + reset |
-
-### Posts
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| GET | `/api/posts` | Yes | Feed posts |
-| POST | `/api/posts` | Yes | Create post |
-| GET | `/api/posts/{id}` | Yes | Single post |
-| PUT | `/api/posts/{id}` | Yes | Edit post |
-| DELETE | `/api/posts/{id}` | Yes | Delete post |
-| GET | `/api/posts/user/{id}` | Yes | User's posts |
-| GET | `/api/posts/hashtag/{tag}` | Yes | Posts by hashtag |
-
-### Likes / Bookmarks
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/api/likes` | Yes | Toggle like |
-| GET | `/api/posts/{id}/likes` | Yes | Like list |
-| POST | `/api/bookmarks` | Yes | Toggle bookmark |
-| GET | `/api/bookmarks` | Yes | Saved posts |
-
-### Comments
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| GET | `/api/posts/{id}/comments` | Yes | Get comments |
-| POST | `/api/posts/{id}/comments` | Yes | Add comment |
-| DELETE | `/api/comments/{id}` | Yes | Delete comment |
-
-### Follow
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/api/follow` | Yes | Follow/unfollow |
-| GET | `/api/follow/{id}/status` | Yes | Follow status |
-| GET | `/api/follow/requests` | Yes | Pending requests |
-| POST | `/api/follow/approve/{id}` | Yes | Approve request |
-| POST | `/api/follow/reject/{id}` | Yes | Reject request |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/register` | Create account |
+| POST | `/api/auth/login` | Login |
+| POST | `/api/auth/forgot-password` | Send reset code |
+| POST | `/api/auth/reset-password` | Reset password |
+| POST | `/api/auth/change-password` | Change password |
+| DELETE | `/api/auth/account` | Delete account |
 
 ### Users
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| GET | `/api/users/{id}` | Yes | Profile (ID or username) |
-| GET | `/api/users/{id}/stats` | Yes | User stats |
-| PUT | `/api/users/profile` | Yes | Update profile |
-| POST | `/api/users/toggle-privacy` | Yes | Toggle private |
-| GET | `/api/users/search` | Yes | Search users |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/users` | List users |
+| GET | `/api/users/search` | Search users |
+| GET | `/api/users/me` | Current user |
+| POST | `/api/users/profile` | Update profile |
+| GET | `/api/users/{id}` | User profile |
+| GET | `/api/users/{id}/stats` | User stats |
 
-### Messages (1-on-1)
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| GET | `/api/messages/conversations` | Yes | Conversation list |
-| GET | `/api/messages/{userId}` | Yes | Message history |
-| POST | `/api/messages/{userId}` | Yes | Send message |
-| DELETE | `/api/messages/{id}` | Yes | Delete message |
+### Posts
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/posts` | Feed posts |
+| POST | `/api/posts` | Create post |
+| GET | `/api/posts/{id}` | Single post |
+| PUT | `/api/posts/{id}` | Update post |
+| DELETE | `/api/posts/{id}` | Delete post |
+| GET | `/api/posts/hashtag/{tag}` | Posts by hashtag |
 
-### Group Chat
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| GET | `/api/groups` | Yes | My groups |
-| POST | `/api/groups` | Yes | Create group |
-| GET | `/api/groups/{id}` | Yes | Group details |
-| POST | `/api/groups/{id}/members` | Yes | Add members |
-| DELETE | `/api/groups/{id}/members/{userId}` | Yes | Remove member |
-| POST | `/api/groups/{id}/messages` | Yes | Send message |
-| GET | `/api/groups/{id}/messages` | Yes | Group messages |
-| DELETE | `/api/groups/{id}` | Yes | Delete group |
-
-### Notifications
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| GET | `/api/notifications` | Yes | List notifications |
-| PATCH | `/api/notifications/seen` | Yes | Mark all seen |
-| PATCH | `/api/notifications/{id}/read` | Yes | Mark read |
-| GET | `/api/notifications/preferences` | Yes | Get preferences |
-| PUT | `/api/notifications/preferences` | Yes | Update preferences |
+### Messages
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/messages` | Send message |
+| GET | `/api/messages/conversations` | Conversation list |
+| GET | `/api/messages/{userId}` | Message history |
+| POST | `/api/messages/{id}/react` | Add reaction |
+| POST | `/api/messages/{id}/vanish` | Toggle vanish mode |
 
 ### Stories
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| GET | `/api/stories` | Yes | Friends stories |
-| POST | `/api/stories` | Yes | Create story |
-| DELETE | `/api/stories/{id}` | Yes | Delete story |
-| POST | `/api/stories/{id}/view` | Yes | Mark viewed |
-| POST | `/api/stories/{id}/react` | Yes | React to story |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/stories` | Feed stories |
+| POST | `/api/stories` | Create story |
+| POST | `/api/stories/{id}/view` | Mark viewed |
+| POST | `/api/stories/{id}/react` | React to story |
 
-### Explore
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| GET | `/api/explore` | Yes | Trending + suggested |
+### Group Chat
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/groups` | My groups |
+| POST | `/api/groups` | Create group |
+| POST | `/api/groups/{id}/members` | Add members |
+| POST | `/api/groups/{id}/messages` | Send message |
 
-### Block
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/api/block` | Yes | Block/unblock |
-| GET | `/api/block` | Yes | Blocked users |
-| GET | `/api/block/{id}/status` | Yes | Block status |
-
-### Support
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/api/feedback` | Yes | Submit feedback |
-| GET | `/api/help` | No | Help content |
-| GET | `/api/privacy` | No | Privacy policy |
-| GET | `/api/terms` | No | Terms of service |
+**Full API documentation:** See [README Backend](laravel-backend/README.md)
 
 ---
 
@@ -248,88 +280,120 @@ Scan the QR code with Expo Go (Android) or run on an emulator.
 
 ```
 sonix/
-├── laravel-backend/          # Laravel API
+├── expo-app/                    # React Native / Expo Mobile App
+│   ├── App.js                   # Entry point
+│   ├── app.json                 # Expo configuration
+│   ├── eas.json                 # EAS Build configuration
+│   ├── package.json             # Dependencies
+│   └── src/
+│       ├── api/                 # API client, cache, media, notifications, websocket
+│       ├── components/          # Reusable components
+│       ├── context/             # React Context (Auth, Language)
+│       ├── i18n/                # Translations (EN/AR)
+│       ├── navigation/          # App navigation
+│       ├── screens/             # 35 screens
+│       └── utils/               # Utilities
+│
+├── laravel-backend/             # Laravel API Backend
 │   ├── app/
-│   │   ├── Console/Commands/   # Custom artisan commands
-│   │   ├── Events/             # Event classes
-│   │   ├── Exceptions/         # Exception handlers
-│   │   ├── Helpers/            # Utility helpers
-│   │   ├── Http/Controllers/   # API controllers
-│   │   ├── Models/             # Eloquent models
-│   │   └── Services/           # Business logic services
-│   ├── config/                 # Configuration files
-│   ├── database/migrations/    # Database migrations
-│   ├── routes/                 # Route definitions
-│   └── storage/                # File storage
+│   │   ├── Console/Commands/    # Custom commands
+│   │   ├── Helpers/             # Helpers
+│   │   ├── Http/
+│   │   │   ├── Controllers/Api/ # 22 controllers
+│   │   │   └── Middleware/       # Security middleware
+│   │   ├── Models/              # 33 models
+│   │   └── Services/            # Services
+│   ├── config/                  # Configuration
+│   ├── database/migrations/     # 56 migrations
+│   └── routes/api.php           # 95+ routes
 │
-├── expo-app/                  # React Native / Expo app
-│   ├── src/
-│   │   ├── api/                # API client + helpers
-│   │   ├── assets/             # Images, fonts
-│   │   ├── components/         # Reusable components
-│   │   ├── context/            # React contexts (Auth, Language)
-│   │   ├── i18n/               # Translations (EN/AR)
-│   │   ├── navigation/         # React Navigation setup
-│   │   └── screens/            # All app screens
-│   ├── App.js                  # Root component
-│   └── app.json                # Expo config
-│
-└── docs/                      # Documentation
+├── Dockerfile                   # Docker configuration
+├── docker-entrypoint.sh         # Startup script
+├── supervisord.conf             # Process manager
+├── nginx-site.conf              # Nginx configuration
+├── railway.json                 # Railway config
+├── README.md                    # This file
+├── SALES_PITCH.md               # Detailed sales document
+├── INSTALL.md                   # Installation guide
+├── DEPLOY.md                    # Deployment guide
+├── CONFIG.md                    # Configuration guide
+├── CUSTOMIZATION.md             # Customization guide
+└── LICENSE                      # License
 ```
-
----
-
-## Customization
-
-### Changing the App Name
-
-1. Edit `expo-app/app.json` — change `name` and `slug`
-2. Edit `expo-app/src/i18n/translations.js` — change `sonix` key
-
-### Color Theme
-
-Edit `expo-app/src/components/Theme.js`:
-
-```js
-export const COLORS = {
-  primary: "#6C63FF",   // Your brand color
-  background: "#0D1117", // Dark bg
-  surface: "#161B22",    // Card bg
-  // ...
-};
-```
-
-### Adding a New Language
-
-1. Add translation object in `expo-app/src/i18n/translations.js`
-2. Add language to the picker in `expo-app/src/context/LanguageContext.js`
-3. Add the language code to `expo-app/app.json` `"locales"` section
 
 ---
 
 ## Deployment
 
-### Backend (Production)
-
-Recommended providers: **Railway**, **DigitalOcean App Platform**, **RunCloud**, or any VPS.
+### Docker (Recommended)
 
 ```bash
-# Production-ready commands
-composer install --no-dev --optimize-autoloader
-php artisan config:cache
-php artisan route:cache
-php artisan migrate --force
+docker build -t sonix .
+docker run -p 80:80 sonix
 ```
 
-### Mobile App (Store Release)
+### EAS Build (APK)
 
 ```bash
 cd expo-app
-npx expo prebuild
-npx expo run:android --variant release  # Android APK/AAB
-# or use EAS Build:
 npx eas build --platform android --profile production
 ```
+
+### Cloud Platforms
+
+| Platform | Type | Cost |
+|----------|------|------|
+| Railway | Backend | $5-20/mo |
+| DigitalOcean | Backend | $5-25/mo |
+| EAS Build | APK | Free tier available |
+| Cloudinary | Media | Free tier available |
+
+---
+
+## Customization
+
+### Change App Name
+1. Edit `expo-app/app.json` — change `name` and `slug`
+2. Edit `expo-app/src/i18n/translations.js` — change `sonix` key
+
+### Change Colors
+Edit `expo-app/src/components/Theme.js`:
+
+```js
+export const COLORS = {
+  primary: "#6C63FF",   // Your brand color
+  background: "#0D1117", // Dark background
+  surface: "#161B22",    // Card background
+  accent: "#FF6B6B",     // Accent color
+};
+```
+
+### Add New Language
+1. Add translation object in `expo-app/src/i18n/translations.js`
+2. Add language to `expo-app/src/context/LanguageContext.js`
+
+---
+
+## What You Get
+
+### Source Code
+- ✅ Complete Laravel backend
+- ✅ Complete React Native / Expo mobile app
+- ✅ 56 database migrations
+- ✅ Docker configuration
+- ✅ Environment templates
+
+### Documentation
+- ✅ INSTALL.md
+- ✅ DEPLOY.md
+- ✅ CONFIG.md
+- ✅ CUSTOMIZATION.md
+- ✅ SALES_PITCH.md (detailed product overview)
+
+### Support (Premium)
+- ✅ 2 months technical support
+- ✅ 1 hour training session
+- ✅ Critical bug fixes
 
 ---
 
@@ -339,6 +403,8 @@ All Rights Reserved. This source code is the property of the copyright holder. D
 
 ---
 
-## Support
+## Contact
 
 For technical inquiries or purchase information, please contact the repository owner.
+
+**Repository:** [github.com/HEYTHEM2009/sonix](https://github.com/HEYTHEM2009/sonix)
