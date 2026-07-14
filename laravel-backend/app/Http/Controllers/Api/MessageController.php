@@ -30,7 +30,7 @@ class MessageController extends Controller
             $rules['image'] = 'image|max:10240';
         }
         if ($request->hasFile('voice')) {
-            $rules['voice'] = 'mimes:mp3,wav,ogg,webm|max:10240';
+            $rules['voice'] = 'mimes:mp3,wav,m4a,ogg,webm|max:10240';
         }
         $request->validate($rules);
 

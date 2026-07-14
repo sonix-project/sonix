@@ -249,6 +249,7 @@ export default function ChatScreen({ route, navigation }) {
   const flatListRef = useRef(null);
   const typingTimerRef = useRef(null);
   const recordTimerRef = useRef(null);
+  const recordTimeRef = useRef(0);
   const recordingRef = useRef(null);
 
   const load = useCallback(async (cursor = null) => {
@@ -418,9 +419,10 @@ export default function ChatScreen({ route, navigation }) {
       recorder.record();
       recordingRef.current = recorder;
       setIsRecording(true);
+      recordTimeRef.current = 0;
       setRecordTime(0);
       setRecordCancel(false);
-      recordTimerRef.current = setInterval(() => setRecordTime((p) => p + 1), 1000);
+      recordTimerRef.current = setInterval(() => { setRecordTime((p) => { recordTimeRef.current = p + 1; return p + 1; }); }, 1000);
     } catch (e) { console.warn("Record error", e); }
   };
 
@@ -430,21 +432,27 @@ export default function ChatScreen({ route, navigation }) {
     try {
       await recordingRef.current.stop();
       try { const audio = require("expo-audio"); await audio.setAudioModeAsync({ allowsRecording: false }); } catch (_) {}
-      if (!cancel && recordTime > 0) {
+      const time = recordTimeRef.current;
+      if (!cancel && time > 0) {
         const uri = recordingRef.current.uri;
-        const formData = new FormData();
-        formData.append("receiver_id", String(userId));
-        formData.append("duration", String(recordTime));
-        const filename = `voice_${Date.now()}.m4a`;
-        formData.append("voice", { uri, name: filename, type: "audio/m4a" });
-        setSending(true);
-        await client.post("/messages", formData, { headers: { "Content-Type": "multipart/form-data" }, timeout: 120000 });
-        await load();
-        setSending(false);
+        if (uri) {
+          const formData = new FormData();
+          formData.append("receiver_id", String(userId));
+          formData.append("duration", String(time));
+          const filename = `voice_${Date.now()}.m4a`;
+          formData.append("voice", { uri, name: filename, type: "audio/m4a" });
+          setSending(true);
+          try {
+            await client.post("/messages", formData, { headers: { "Content-Type": "multipart/form-data" }, timeout: 120000 });
+            await load();
+          } catch (e) { console.warn("Send voice error", e); }
+          setSending(false);
+        }
       }
     } catch (e) { console.warn("Stop recording error", e); }
     recordingRef.current = null;
     setIsRecording(false);
+    recordTimeRef.current = 0;
     setRecordTime(0);
   };
 
