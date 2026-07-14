@@ -39,7 +39,7 @@ export default function BlockedUsersScreen({ navigation }) {
 
   const renderItem = useCallback(({ item }) => (
     <View style={s.userRow}>
-      <Image source={{ uri: resolveUrl(item.avatar) }} style={s.avatar} />
+      {item.avatar ? <Image source={{ uri: resolveUrl(item.avatar) }} style={s.avatar} /> : <View style={[s.avatar, { backgroundColor: COLORS.primary + "30", alignItems: "center", justifyContent: "center" }]}><Text style={{ color: COLORS.primary, fontWeight: "700", fontSize: 16 }}>{item.username?.[0]?.toUpperCase() || "?"}</Text></View>}
       <View style={s.userInfo}>
         <Text style={s.username}>{item.username}</Text>
       </View>

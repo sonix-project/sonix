@@ -34,7 +34,7 @@ export default function HashtagPostsScreen({ route, navigation }) {
   const renderPost = ({ item }) => (
     <TouchableOpacity style={s.postCard} onPress={() => navigation.navigate("Comments", { postId: item.id })} activeOpacity={0.8}>
       <View style={s.postHeader}>
-        <Image source={{ uri: resolveUrl(item.user?.avatar) }} style={s.avatar} />
+        {item.user?.avatar ? <Image source={{ uri: resolveUrl(item.user?.avatar) }} style={s.avatar} /> : <View style={[s.avatar, { backgroundColor: COLORS.primary + "30", alignItems: "center", justifyContent: "center" }]}><Text style={{ color: COLORS.primary, fontWeight: "700", fontSize: 12 }}>{item.user?.username?.[0]?.toUpperCase() || "?"}</Text></View>}
         <Text style={s.username}>{item.user?.username}</Text>
       </View>
       {item.image && <Image source={{ uri: resolveUrl(item.image) }} style={s.postImg} resizeMode="cover" />}

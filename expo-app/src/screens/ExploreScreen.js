@@ -58,7 +58,7 @@ export default function ExploreScreen({ navigation }) {
 
   const renderSuggestedUser = ({ item }) => (
     <TouchableOpacity style={s.userRow} onPress={() => navigation.navigate("UserProfile", { userId: item.id })} activeOpacity={0.7}>
-      <Image source={{ uri: resolveUrl(item.avatar) }} style={s.userAvatar} />
+      {item.avatar ? <Image source={{ uri: resolveUrl(item.avatar) }} style={s.userAvatar} /> : <View style={[s.userAvatar, { backgroundColor: COLORS.primary + "30", alignItems: "center", justifyContent: "center" }]}><Text style={{ color: COLORS.primary, fontWeight: "700", fontSize: 16 }}>{item.username?.[0]?.toUpperCase() || "?"}</Text></View>}
       <View style={s.userInfo}>
         <Text style={s.userName}>{item.username}</Text>
         {item.bio ? <Text style={s.userBio} numberOfLines={1}>{item.bio}</Text> : null}
