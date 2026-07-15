@@ -44,14 +44,12 @@ class WatermarkService
             $width = imagesx($image);
             $height = imagesy($image);
 
-            // Create watermark image
             $fontPath = public_path('fonts/arial.ttf');
             if (!file_exists($fontPath)) {
                 $fontPath = null;
             }
 
             if ($fontPath && function_exists('imagettftext')) {
-                // Use TrueType font
                 $bbox = imagettfbbox($this->fontSize, 0, $fontPath, $this->watermarkText);
                 $textWidth = abs($bbox[2] - $bbox[0]);
                 $textHeight = abs($bbox[1] - $bbox[5]);
@@ -77,7 +75,6 @@ class WatermarkService
                 imagefilledrectangle($image, $x, $y, $x + $boxWidth, $y + $boxHeight, $color);
             }
 
-            // Save output
             $outputPath = $info['dirname'] . '/' . $info['filename'] . '_wm.' . $ext;
 
             $result = match($ext) {

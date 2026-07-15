@@ -71,7 +71,6 @@ class TranscodeVideo implements ShouldQueue
                 return;
             }
 
-            // Generate thumbnail
             $thumbPath = $this->outputDir . '/' . $basename . '_thumb.jpg';
             Process::run([
                 'ffmpeg',
@@ -83,7 +82,6 @@ class TranscodeVideo implements ShouldQueue
                 $thumbPath,
             ]);
 
-            // Generate multiple quality variants
             $qualities = [
                 '480p' => ['640', '-2'],
                 '720p' => ['1280', '-2'],
@@ -106,7 +104,6 @@ class TranscodeVideo implements ShouldQueue
                 ]);
             }
 
-            // Update the model with transcoded path
             $relativePath = '/uploads/transcoded/' . $basename . '_transcoded.mp4';
             $thumbRelative = '/uploads/transcoded/' . $basename . '_thumb.jpg';
 

@@ -27,7 +27,7 @@ class MediaSecurityService
         $payload = $path . '|' . $expires;
         $signature = hash_hmac('sha256', $payload, $this->secret);
 
-        $baseUrl = config('app.url', 'https://sonix-production.up.railway.app');
+        $baseUrl = config('app.url', 'http://localhost');
 
         return "{$baseUrl}/media/{$path}?"
             . http_build_query([
@@ -41,7 +41,6 @@ class MediaSecurityService
      */
     public function verifySignedUrl(string $path, string $signature, string $expires): bool
     {
-        // Check expiration
         if (!is_numeric($expires) || (int) $expires < time()) {
             return false;
         }

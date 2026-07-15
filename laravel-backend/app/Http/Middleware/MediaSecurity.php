@@ -18,7 +18,6 @@ class MediaSecurity
 
         $service = new MediaSecurityService();
 
-        // Skip signing check for public paths
         if (!$service->requiresSigning($path)) {
             return $this->serveFile($request, $path);
         }

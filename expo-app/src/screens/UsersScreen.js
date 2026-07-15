@@ -47,7 +47,6 @@ export default function UsersScreen({ navigation }) {
     return () => clearTimeout(timer);
   }, [query]);
 
-  // Load following list once
   useEffect(() => {
     if (!user) return;
     client.get(`/follow/${user.id}/following`).then((res) => {
@@ -55,7 +54,6 @@ export default function UsersScreen({ navigation }) {
     }).catch(() => {});
   }, [user]);
 
-  // Load recent searches
   useEffect(() => {
     AsyncStorage.getItem(RECENT_KEY).then((v) => {
       if (v) setRecent(JSON.parse(v));

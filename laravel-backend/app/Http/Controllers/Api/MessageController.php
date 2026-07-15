@@ -246,7 +246,6 @@ class MessageController extends Controller
                 Redis::setex("user:last_seen:{$user->id}", 86400, now()->toISOString());
             }
         } catch (\Throwable $e) {
-            // Redis unavailable, skip silently
         }
 
         return response()->json(['message' => 'Online status updated']);

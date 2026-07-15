@@ -76,7 +76,6 @@ class AntiScraping
                 ]);
             }
         } catch (\Throwable $e) {
-            // Redis unavailable, skip rate limiting
         }
 
         // 3. Suspicious pattern detection
@@ -88,8 +87,7 @@ class AntiScraping
                 'method' => $request->method(),
             ]);
 
-            // Add delay to suspicious requests
-            usleep(500000); // 500ms
+            usleep(500000);
         }
 
         $response = $next($request);
@@ -135,7 +133,6 @@ class AntiScraping
             }
             if ($count > 20) return true; // More than 20 requests in 10 seconds
         } catch (\Throwable $e) {
-            // Redis unavailable
         }
 
         return false;

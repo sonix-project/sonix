@@ -252,7 +252,6 @@ class UserController extends Controller
                 $lastSeen = Redis::get("user:last_seen:{$id}");
             }
         } catch (\Throwable $e) {
-            // Redis unavailable, return defaults
         }
 
         return response()->json([
@@ -271,7 +270,6 @@ class UserController extends Controller
                 Redis::setex("user:last_seen:{$userId}", 86400, now()->toISOString());
             }
         } catch (\Throwable $e) {
-            // Redis unavailable, skip silently
         }
         return response()->json(['message' => 'Online status updated']);
     }
